@@ -1,0 +1,6 @@
+# Starter profile legacy-aerohive. Use it by name (use: [legacy-aerohive]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Aerohive-era access points and routers."
+filters:
+  - entries: [AP122, AP122X, AP130, AP150W, AP230, AP245X, AP250, AP30, AP550, AP630, AP650/AP650X, AP1130, SR2024 and SR2024P, SR2124P, SR2148P, SR2208P, SR2224P, SR2324P, SR2348P, XR200P, XR600, XR600P]
+    releases: all

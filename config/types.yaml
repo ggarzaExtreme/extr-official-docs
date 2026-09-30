@@ -1,0 +1,139 @@
+# Document types: what each is, what it is usually worth, and how a title is recognised. The scanner and
+# the explorer both read this file. Values are this repo's judgement, not a fact about documents: they
+# colour and order things, and (a setting in the explorer) can filter.
+
+values:
+  core: the main reference for a release, what it does and how to configure it
+  supporting: installing, deploying, administering, upgrading, troubleshooting and licensing; datasheets and course outlines
+  specialist: "look-up and developer material: APIs, references, specifications, migration, policies, stencils"
+  light: "short or secondary: quick references, videos, document bundles, regulatory notices, marketing briefs, untyped titles"
+
+# In display order within each value. short: the label where space is tight (a Matrix heading).
+types:
+  - name: Release Notes
+    value: core
+    means: "What is new, fixed and still open in one release; one per release, often one per patch."
+  - name: User Guide
+    value: core
+    means: "How to configure and use the features of a release line; the main reference for an operating system or application."
+  - name: Command Reference
+    value: core
+    short: Command Ref
+    means: "Every CLI command with its syntax, parameters and examples."
+  - name: Feature Matrix
+    value: core
+    means: "Which features, scale and standards each platform supports in a release."
+  - name: Configuration Guide
+    value: core
+    short: Config Guide
+    means: "Task-focused configuration of a feature area, including the legacy \"Configuring ...\" volumes that split a user guide into books."
+  - name: Installation Guide
+    value: supporting
+    short: Install Guide
+    means: "Hardware: mounting, cabling, power, first boot, replacement. Software: installing a server or virtual appliance."
+  - name: Deployment Guide
+    value: supporting
+    short: Deploy Guide
+    means: "Designing and rolling out a solution across devices or sites."
+  - name: Administration Guide
+    value: supporting
+    short: Admin Guide
+    means: "Running and administering a product, including high availability and integrations."
+  - name: Upgrade Guide
+    value: supporting
+    means: "Moving a product to a newer release."
+  - name: Troubleshooting Guide
+    value: supporting
+    short: "Trouble&shy;shooting"
+    means: "Diagnosing and fixing problems."
+  - name: Security Guide
+    value: supporting
+    means: "Hardening and security configuration."
+  - name: Getting Started
+    value: supporting
+    means: "A first walk-through of a product."
+  - name: Licensing
+    value: supporting
+    means: "License types, activation and entitlements."
+  - name: Datasheet
+    value: supporting
+    means: "A product's datasheet, from its page on the main site."
+  - name: Course Outline
+    value: supporting
+    means: "A public training course outline."
+  - name: Migration
+    value: specialist
+    means: "Moving from an older product, operating system or API."
+  - name: Reference
+    value: specialist
+    means: "Look-up material: MIBs, EMS message catalogs, known restrictions, technical references."
+  - name: API
+    value: specialist
+    means: "REST, RESTCONF, NETCONF or GraphQL references and developer portals."
+  - name: Specifications
+    value: specialist
+    short: Specs
+    means: "Technical specifications and minimum requirements."
+  - name: Policy
+    value: specialist
+    means: "Warranty, lifecycle and support policies, MIBs, the service matrix."
+  - name: Stencil
+    value: specialist
+    means: "Visio stencils."
+  - name: Quick Reference
+    value: light
+    short: Quick Ref
+    means: "Two-to-four-page setup or quick-install cards that point to the full guide."
+  - name: Video
+    value: light
+    means: "Short how-to videos."
+  - name: Doc Collection
+    value: light
+    short: Doc Bundle
+    means: "A zip of every document for one release: the same files, bundled."
+  - name: Regulatory
+    value: light
+    means: "Regulatory, compliance and safety notices."
+  - name: Brief
+    value: light
+    means: "Marketing resources from the main site: solution briefs, white papers, ebooks."
+  - name: Other
+    value: light
+    means: "Titles no rule above recognises. Each report counts new ones, so a new kind of document gets noticed."
+
+# How a docs-site document gets its type. A format decides first; then the title, first matching rule wins
+# (patterns are regular expressions, case-insensitive); a title matching none is Other. Main-site
+# documents get their type from where they are listed (Datasheet, Policy, Stencil, Course Outline, Brief).
+by_format: {api: API, video: Video, zip: Doc Collection}
+rules:
+  - [Release Notes, "release notes"]
+  - [Quick Reference, "quick (reference|start|install)"]
+  - [Command Reference, "command reference|cli reference"]
+  - [Feature Matrix, "matrix"]
+  - [Installation Guide, "\\binstall"]
+  - [Deployment Guide, "deploy|design guide"]
+  - [Configuration Guide, "configuration guide"]
+  - [Licensing, "licens"]
+  - [Migration, "migrat"]
+  - [User Guide, "user guide"]
+  - [Reference, "reference|catalog|\\bmibs?\\b"]
+  - [Command Reference, "\\bcli (guide|reference)\\b"]
+  - [API, "\\b(rest|restconf|netconf|graphql|sdk|developer|puppet|ansible|openstack)\\b|\\bapis?\\b"]
+  - [Release Notes, "^read ?me\\b|^\\S.*\\bversion \\d+(\\.\\d+){2,}\\s*$"]
+  - [Configuration Guide, "(^|[–-] )configuring\\b|\\bconfiguration\\b|\\bplanning and engineering\\b|\\bmonitoring performance\\b"]
+  - [Troubleshooting Guide, "troubleshoot"]
+  - [Upgrade Guide, "\\bupgrad"]
+  - [Security Guide, "\\bsecurity guide|hardening"]
+  - [Administration Guide, "\\badministration\\b|\\badmin guide|high availability|integration guide"]
+  - [Getting Started, "getting started"]
+  - [Regulatory, "regulatory|compliance|safety"]
+  - [Specifications, "specification|technical spec|minimum software requirements"]
+  - [Installation Guide, "instalaci|installation|hardware replacement|accessories guide"]
+  - [Administration Guide, "\\badminister"]
+  - [User Guide, "^using (a?cli|cli and edm)\\b|\\bmaintenance guide"]
+  - [Configuration Guide, "feature guide|best practices|\\bsmartrf guide"]
+  - [Release Notes, "known restrictions|release information|documentation updates"]
+  - [Regulatory, "directives and regulations"]
+
+# A title naming one of these languages is a translation (left out unless a filter asks for them).
+translation: "\\((Brazilian|Hebrew|Korean|Russian|Simplified|Spanish|Traditional|Japanese|French|German|Italian|Arabic|Simple Chinese|Portuguese|Chinese)"

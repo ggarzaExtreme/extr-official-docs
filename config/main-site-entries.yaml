@@ -1,0 +1,50 @@
+# Which docs-site entry each main-site product belongs to, so a product's datasheet sits in the same
+# explorer row as its guides. Kept by hand. Names the main site and the docs site already share
+# (33 of 73 today, e.g. "SLX9150") need no line here.
+#
+# Each scan lists under To Check any main-site product that matches no entry and has no line here.
+# A product with an empty list is shown under "main site only".
+
+"4000 Series": [4120 Series, 4220 Series]          # one datasheet covers both
+"5120": [5120 Series]
+"5420": [5420 Series]
+"5520": [5520 Series]
+"5720": [5720 Series]
+"7520": [Extreme 7520]
+"7720": [Extreme 7720]
+"7830": [7830 Series]
+"8520": [8520 Series]
+"Extreme 5320 Series – Enterprise Switches": [5320 Series]
+"ERS 3600": [ERS 3600 Series (Hardware)]
+"VSP 4900": [VSP 4900 Series (Hardware)]
+"VSP 7400": [VSP 7400 Series (Hardware)]
+"V300": [V300 Virtual Port Extender]
+"V400": [V400 Virtual Port Extender]
+"SLX 9240": [SLX9240]
+"SLX 9540": [SLX9540]
+"SLX 9640": [SLX9640]
+"SLX 9740": [SLX9740]
+"Industrial Switches (ISW)": [ISW Series Industrial Switches (Hardware)]
+"LRM and MACsec Adapter": [LRM/MACsec Adapter]
+"Optics": [Pluggable Hardware (Optics)]
+"ExtremeAccess Platform 1400 (XA 1400)": [XA1400 Series (Hardware)]
+"Extreme 9920 Cloud-Native Network Visibility Platform": [9920 Network Packet Broker]
+
+"AP305C and AP305CX": ["AP305C, AP305CX"]
+"AP310i and AP310e": [AP310i/e]
+"AP360i and AP360e": [AP360i/e]
+"AP410i and AP410e": [AP410i/e]
+"AP460i and AP460e": [AP460i/e]
+"AP460C": ["AP460C, AP460S6C, and AP460S12C"]
+"AP4060": [AP4060/X]
+"AP5022": [AP5022/FX/S6D]
+"AP5060": [AP5060D and AP5060U]
+"WiNG NX 7500": [NX7500 Series]
+"WiNG VX 9000": [VX9000]
+
+"Extreme Platform ONE: Secure Connectivity Made Simple": [Extreme Platform ONE]
+"ExtremeAnalytics": ["ExtremeAnalytics (formerly Purview, Application Analytics, and Analytics)"]
+"ExtremeCloud IQ - Site Engine": [ExtremeCloud IQ Site Engine]
+
+"Half-Full Duplex Converter": []                   # no docs-site entry
+"Thermal Sensing for Universal Switches": []       # no docs-site entry

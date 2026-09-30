@@ -1,0 +1,6 @@
+X460-G2 Series Component,Minimum EXOS Software Version,Minimum BootROM Version,Last Supported EXOS Software Version,links
+X460-G2-48x-10GE4 X460-G2-24t-GE4 X460-G2-24t-10GE4 X460-G2-48t-GE4 X460-G2-48t-10GE4 X460-G2-24x-10GE4 X460-G2-24p-GE4 X460-G2-24p-10GE4 X460-G2-48p-GE4 X460-G2-48p-10GE4,15.6.1.4,1.0.2.1,latest available,
+X460-G2-24t-24ht-10GE4 X460-G2-24p-24hp-10GE4 X460-G2-16mp-32p-10GE4,22.2.1,1.0.2.3,latest available,
+VIM-2q VIM-2ss VIM-2t VIM-2x,15.6.1.4,N/A,latest available,
+TM-CLK Clock Module,15.6.1.4,N/A,latest available,
+X460-G2 Grounding Lug,N/A,N/A,N/A,

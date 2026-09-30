@@ -1,0 +1,9 @@
+# Starter profile cloud-wireless. Use it by name (use: [cloud-wireless]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Cloud-managed wireless: ExtremeCloud IQ, IQ Engine and current APs."
+filters:
+  - entries: [ExtremeCloud IQ, IQ Engine]
+    types: [User Guide, Command Reference, Release Notes, Feature Matrix, Licensing, Deployment Guide]
+  - entries: [AP3000, AP3000X, AP302W, "AP305C, AP305CX", AP4000, AP4020, AP4020X/FX, AP4060/X, AP410C, "AP460C, AP460S6C, and AP460S12C", AP5010, AP5020, AP5022/FX/S6D, AP5050D, AP5050U, AP5060D and AP5060U]
+    types: [Installation Guide, Datasheet]
+  - entries: [802.11ax and Cloud Access Points Accessories, Antennas Specification Guides, AFC Deployment Guides]

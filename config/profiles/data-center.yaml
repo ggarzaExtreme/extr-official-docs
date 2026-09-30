@@ -1,0 +1,7 @@
+# Starter profile data-center. Use it by name (use: [data-center]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Data-center switching and automation."
+filters:
+  - entries: [SLX-OS Series (software), SLX9150, SLX9250, SLX9540, SLX9640, SLX9740, ExtremeCloud Orchestrator, Extreme Fabric Automation, NetIron (software), 8520 Series, "8720", "8730", "8820"]
+    types: [User Guide, Command Reference, Release Notes, Feature Matrix, Installation Guide, Datasheet]
+snapshots: [main-site/software-release-recommendations-for-efa-slx-os-nos-and-netiron]

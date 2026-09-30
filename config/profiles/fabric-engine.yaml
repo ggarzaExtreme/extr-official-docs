@@ -1,0 +1,10 @@
+# Starter profile fabric-engine. Use it by name (use: [fabric-engine]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Fabric Engine and VOSS, the switches that run them, and fabric design guides."
+filters:
+  - entries: [Fabric Engine, VSP Operating System Software (VOSS)]
+    types: [User Guide, Command Reference, Release Notes, Feature Matrix, Licensing]
+  - entries: [4220 Series, 5320 Series, 5420 Series, 5520 Series, 5720 Series, Extreme 7520, Extreme 7720, 7830 Series, VSP 4900 Series (Hardware), VSP 7400 Series (Hardware), VSP 8600 Series (Hardware)]
+    types: [Installation Guide, Datasheet]
+  - entries: [ERS Migration, Extreme Solution Guides (cross-product)]
+snapshots: [main-site/software-release-recommendations-for-voss-vsp-8600]

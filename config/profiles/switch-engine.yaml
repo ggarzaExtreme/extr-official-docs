@@ -1,0 +1,9 @@
+# Starter profile switch-engine. Use it by name (use: [switch-engine]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Switch Engine and the switches that run it."
+filters:
+  - entries: [Switch Engine, ExtremeXOS]
+    types: [User Guide, Command Reference, Release Notes, Feature Matrix, Licensing]
+  - entries: [4120 Series, 5120 Series, 4220 Series, 5320 Series, 5420 Series, 5520 Series, 5720 Series, Extreme 7520, Extreme 7720, X435, X440-G2, X450-G2, X460-G2, X465, X590, X620, X670-G2, X690, X695, X870, V300 Virtual Port Extender, V400 Virtual Port Extender]
+    types: [Installation Guide, Datasheet]
+snapshots: [main-site/sw-release-extremexos-eos, docs-site/summit-extremeswitching-and-e4g-components-extremexos-software-support]

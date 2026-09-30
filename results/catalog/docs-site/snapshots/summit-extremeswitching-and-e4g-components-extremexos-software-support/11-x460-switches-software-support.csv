@@ -1,0 +1,5 @@
+X460 Series Component,Minimum EXOS Software Version,Minimum BootROM Version,Last Supported EXOS Software Version,links
+X460-24t X460-24x X460-24p X460-48t X460-48x X460-48p,12.5.1,2.0.1.0,16.x,
+SummitStack module SummitStack-V80 module,12.5.1,2.0.1.0,16.x,
+XGM3-2sf,12.5.1,N/A,16.x,
+XGM3S-2sf XGM3S-2xf XGM3SB-4sf,15.1.1,N/A,16.x,

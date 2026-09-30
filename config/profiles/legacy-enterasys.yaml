@@ -1,0 +1,6 @@
+# Starter profile legacy-enterasys. Use it by name (use: [legacy-enterasys]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Enterasys-era switching."
+filters:
+  - entries: [EOS (software), K-Series, S-Series, S-Series Stand Alone (SSA), "D, G, I Series SW"]
+    releases: all

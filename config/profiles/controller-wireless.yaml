@@ -1,0 +1,8 @@
+# Starter profile controller-wireless. Use it by name (use: [controller-wireless]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Controller-based wireless: ExtremeCloud IQ Controller and its appliances."
+filters:
+  - entries: [ExtremeCloud IQ Controller]
+    types: [User Guide, Command Reference, Release Notes, Feature Matrix, Deployment Guide]
+  - entries: [E1120, E2120, E2122, E3120, E3125, VE6120 and VE6125, AP3912i, AP3915e, AP3915i, AP3916ic, AP3917ie, AP3935i/e, AP3965i/e]
+    types: [Installation Guide, Datasheet]

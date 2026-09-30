@@ -1,0 +1,6 @@
+# Starter profile legacy-motorola. Use it by name (use: [legacy-motorola]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Motorola-era wireless: WiNG, RFS and NX controllers."
+filters:
+  - entries: [ExtremeWireless WiNG Software, RFS Series Wireless LAN Switches, RFS4010, NX5500, NX7500 Series, NX9000, NX9500 Series, NX9600 Series, VX9000, AP7602, AP7612, AP7622, AP7632, AP7632i, AP7662i/AP7662, AP8163, AP8533]
+    releases: all

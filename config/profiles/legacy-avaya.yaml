@@ -1,0 +1,8 @@
+# Starter profile legacy-avaya. Use it by name (use: [legacy-avaya]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Avaya-era switching and identity."
+filters:
+  - entries: [ERS 3500 Series, ERS 3500 Series (Hardware), ERS 3600 Series, ERS 3600 Series (Hardware), ERS 4000 Series, ERS 4800 Series, ERS 4800 Series (Hardware), ERS 4900 and 5900 Series, ERS 4900 Series (Hardware), ERS 5000 Series, ERS 5900 Series (Hardware), VSP 4000 Series (Hardware), VSP 7200 Series (Hardware), VSP 8000 Series (Hardware), VSP 9000 Series, VSP 9000 Series (Hardware), Identity Engines, Configuration & Orchestration Manager]
+    releases: all
+  - entries: [VSP Operating System Software (VOSS)]
+    releases: [{to: "8.10"}]

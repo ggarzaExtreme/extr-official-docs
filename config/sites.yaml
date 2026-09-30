@@ -1,0 +1,42 @@
+# Which sites the scanner reads, what it reads on each, and how often. These are the decisions a person
+# makes; how each site is read follows from the site itself (scanner/NOTES.md). The scanner reads this file
+# on every run.
+
+# A new scan is due once the oldest site's last scan is this many days old.
+rescan_after_days: 30
+
+sites:
+  # The documentation site, read whole: the product index, every entry's release pages and the documents
+  # they list, the release-notes archive, and every compatibility-table page (kept as snapshots).
+  docs-site:
+    url: https://supportdocs.extremenetworks.com/
+    not_read:
+      - article-style pages (WiNG how-tos, empty legacy pages); each report counts them
+      - individual release-note pages (they return server errors; the archive lists the same notes)
+      - the topic pages inside HTML guides (the guide's PDF holds the same content)
+
+  # The main site, only the parts named here (it is mostly marketing).
+  main-site:
+    url: https://www.extremenetworks.com
+    # Top-level paths whose pages are read, with their links and datasheets.
+    areas: [products, platform-one, support, solutions, services, learn]
+    # Under /resources/, only these types, which carry documents. Blogs, case studies, webinars and
+    # videos are left out.
+    resource_types: [solution-brief, white-paper, at-a-glance, brochure, flyer, ebook, report, infographic, training]
+    # Support pages kept as snapshots (text and every table). A path is that one page; a path ending in
+    # /* is every page under it.
+    snapshot_pages:
+      - /support/compatibility-matrices
+      - /support/compatibility-matrices/*
+      - /support/end-of-sale-and-end-of-support-products
+      - /support/mean-time-between-failures
+      - /support/policies
+      - /support/restriction-hazardous-substances
+    not_read:
+      - blogs, case studies, webinars and videos, and the rest of the sitemap outside the areas above
+      - End of Sale announcement bulletins (the End of Sale table holds the same facts)
+
+  # Known, not read yet: its claims don't always match the optics datasheet, which is also sometimes wrong.
+  optics:
+    url: https://optics.extremenetworks.com
+    read: false

@@ -1,0 +1,6 @@
+# Starter profile switching-all. Use it by name (use: [switching-all]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Everything switching, every release."
+filters:
+  - entries: [Summit Family Switches, ExtremeXOS, Switch Engine, 4120 Series, 5120 Series, 4220 Series, 5320 Series, 5420 Series, 5520 Series, 5720 Series, Extreme 7520, Extreme 7720, X435, X440-G2, X450-G2, X460-G2, X465, X480, X590, X620, X670, X670-G2, X690, X695, X770, X870, ISW Series Industrial Switches (Hardware), ISW Series Industrial Switches (Software), Industrial Switches]
+    releases: all

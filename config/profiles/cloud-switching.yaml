@@ -1,0 +1,11 @@
+# Starter profile cloud-switching. Use it by name (use: [cloud-switching]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Universal switches managed from ExtremeCloud IQ or Platform ONE."
+filters:
+  - entries: [Switch Engine, Fabric Engine]
+    types: [User Guide, Release Notes]
+  - entries: [4220 Series, 5320 Series, 5420 Series, 5520 Series, 5720 Series, Extreme 7520, Extreme 7720]
+    types: [Installation Guide, Datasheet]
+  - entries: [ExtremeCloud IQ, Extreme Platform ONE]
+    types: [User Guide, Release Notes, Deployment Guide]
+snapshots: [docs-site/extremecloud-hardware-support]

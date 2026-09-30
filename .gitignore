@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+# Saved pages, so a stopped scan resumes; cleared when a scan finishes
+/.cache/
+# A library for spot-checks; real libraries live wherever their owner keeps them
+/library/
+# Local editor and assistant settings
+/.claude/

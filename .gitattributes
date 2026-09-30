@@ -1,0 +1,3 @@
+# The tool writes LF; keep it LF on every machine so a scan's diff shows only real changes.
+* text=auto eol=lf
+*.png binary

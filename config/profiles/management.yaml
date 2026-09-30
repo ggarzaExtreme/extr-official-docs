@@ -1,0 +1,6 @@
+# Starter profile management. Use it by name (use: [management]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Management, access control, analytics and SD-WAN platforms."
+filters:
+  - entries: [ExtremeCloud IQ Site Engine, ExtremeControl, "ExtremeAnalytics (formerly Purview, Application Analytics, and Analytics)", ExtremeCloud IQ, Extreme Platform ONE, Extreme Platform ONE Security (Formerly UZTNA), ExtremeCloud SD-WAN, Extreme Intuitive Insights]
+    types: [User Guide, Command Reference, Release Notes, Feature Matrix, Installation Guide, Deployment Guide, Datasheet]

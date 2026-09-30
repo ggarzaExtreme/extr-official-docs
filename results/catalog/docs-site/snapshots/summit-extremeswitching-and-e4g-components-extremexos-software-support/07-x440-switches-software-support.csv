@@ -1,0 +1,5 @@
+X440 Series Component,Minimum EXOS Software Version,Minimum BootROM Version,Last Supported EXOS Software Version,links
+X440-24t X440-24p,15.1.1,2.0.1.6,16.x,
+X440-8t X440-8p X440-24t-10G X440-24p-10G X440-48t X440-48p X440-48t-10G X440-48p-10G,15.1.2,2.0.1.6,16.x,
+X440-L2-24t X440-L2-48t,15.2.1,2.0.1.7,16.x,
+X440-24tDC X440-24x X440-24x-10G X440-48tDC,15.3.1,2.0.1.7,16.x,

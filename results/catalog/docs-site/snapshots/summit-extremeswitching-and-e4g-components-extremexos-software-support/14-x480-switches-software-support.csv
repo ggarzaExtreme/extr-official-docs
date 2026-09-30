@@ -1,0 +1,6 @@
+X480 Series Component,Minimum EXOS Software Version,Minimum BootROM Version,Last Supported EXOS Software Version,links
+X480-24x X480-48t X480-48x,12.4.1,2.0.0.9,16.x,
+VIM2-10G4X,12.4.1,N/A,16.x,
+VIM2-SummitStack VIM2-SummitStack128,12.4.1,N/A,16.x,
+VIM2-SummitStack-V80,12.5.3,N/A,16.x,
+VIM3-40G4x,15.1.2,N/A,16.x,

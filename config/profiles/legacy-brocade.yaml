@@ -1,0 +1,6 @@
+# Starter profile legacy-brocade. Use it by name (use: [legacy-brocade]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Brocade-era data center."
+filters:
+  - entries: [VDX6740, VDX6940, VDX8770, Network OS (software), "NetIron (CES, CER & MLX Series)", SLX9030, SLX9140, SLX9240, SLX9850]
+    releases: all

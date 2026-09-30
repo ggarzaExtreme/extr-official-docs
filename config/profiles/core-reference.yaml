@@ -1,0 +1,5 @@
+# Starter profile core-reference. Use it by name (use: [core-reference]) in a library's .docsync/profile.yaml, or open it in the explorer.
+profile_version: 1
+about: "Core documents for every entry, newest release."
+filters:
+  - types: [User Guide, Command Reference, Release Notes, Feature Matrix]

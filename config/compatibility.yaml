@@ -1,0 +1,76 @@
+# Which hardware runs which operating system, from tables the scan keeps as snapshots. Each source says
+# which snapshot, what kind of statement its table makes, which software it is about, and which docs-site
+# entry each platform is. Kept by hand; each report lists platforms a table names that no line here maps.
+#
+# kind:
+#   range        the table states a minimum and a last supported release (or "latest available")
+#   recommended  the table states recommended releases for each platform; it says the software runs there,
+#                not from which release
+# platform_by:
+#   file         each table (one CSV per table) is one platform, named by its file name after the number
+#   row          each row is one platform, named in the first column
+# software: the names the explorer shows (Switch Engine, ExtremeXOS, Fabric Engine, VOSS)
+
+# Each software name the tables use, and the docs-site entry that documents it.
+software:
+  Switch Engine: Switch Engine
+  ExtremeXOS: ExtremeXOS
+  Fabric Engine: Fabric Engine
+  VOSS: VSP Operating System Software (VOSS)
+
+sources:
+  - snapshot: docs-site/summit-extremeswitching-and-e4g-components-extremexos-software-support
+    kind: range
+    software: [Switch Engine, ExtremeXOS]     # one numbering: ExtremeXOS became Switch Engine
+    platform_by: file
+    platforms:
+      5320: 5320 Series
+      5420: 5420 Series
+      5520: 5520 Series
+      5720: 5720 Series
+      x435: X435
+      x440-g2: X440-G2
+      x450-g2: X450-G2
+      x460-g2: X460-G2
+      x465: X465
+      x480: X480
+      x590: X590
+      x620: X620
+      x670: X670
+      x670-g2: X670-G2
+      x690: X690
+      x695: X695
+      x770: X770
+      x870: X870
+      v300: V300 Virtual Port Extender
+      v400: V400 Virtual Port Extender
+      e4g: E4G Series Routers
+    # tables about platforms the docs site has no entry for (older models): read, not reported as unmapped
+    no_entry: [x430, x440, x450, x460]
+
+  - snapshot: main-site/software-release-recommendations-for-voss-vsp-8600
+    kind: recommended
+    # the software is named in each cell ("Fabric Engine 9.4.1.0", "VOSS 8.10.9.0")
+    software_by_prefix:
+      Fabric Engine: Fabric Engine
+      VOSS: VOSS
+      VSP8600: VOSS                        # the VSP 8600 runs its own VOSS line (8.1.x)
+    platform_by: row
+    platforms:
+      4220: 4220 Series
+      5320: 5320 Series
+      5420: 5420 Series
+      5520: 5520 Series
+      5720: 5720 Series
+      7520: Extreme 7520
+      7720: Extreme 7720
+      7830: 7830 Series
+      XA1400: XA1400 Series (Hardware)
+      VSP4450: VSP 4000 Series (Hardware)
+      VSP4850: VSP 4000 Series (Hardware)
+      VSP4900: VSP 4900 Series (Hardware)
+      VSP7200: VSP 7200 Series (Hardware)
+      VSP7400: VSP 7400 Series (Hardware)
+      VSP8200: VSP 8000 Series (Hardware)
+      VSP8400: VSP 8000 Series (Hardware)
+      VSP8600: VSP 8600 Series (Hardware)

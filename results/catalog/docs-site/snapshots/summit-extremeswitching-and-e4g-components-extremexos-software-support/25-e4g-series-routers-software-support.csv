@@ -1,0 +1,5 @@
+E4G Series Component,Minimum EXOS Software Version,Minimum BootROM Version,Last Supported EXOS Software Version,links
+E4G-200 E4G-400,15.1.1,2.0.1.6,16.x,
+E4G-200-12x,15.2.2,2.0.1.7,16.x,
+E4G-200 CLK E4G-200 F16T1E1 XGM3S-2xf XGM3S-2sf XGM3SB-4sf E4G-B16T1E1,15.1.1,N/A,16.x,
+E4G-200-12x CLK E4G-200-12x F16T1E1,15.2.2,N/A,16.x,
