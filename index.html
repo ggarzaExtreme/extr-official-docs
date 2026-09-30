@@ -186,7 +186,7 @@ pre.yaml{margin:0;padding:10px;background:var(--soft);border-radius:4px;font:11.
 
 /* ---------- matrix: fills the width it has ---------- */
 .mx{border:1px solid var(--rule);border-radius:6px;background:var(--panel);overflow:auto}
-.mx table{border-collapse:separate;border-spacing:0;font-size:12.5px;width:100%;table-layout:fixed}
+.mx table{border-collapse:separate;border-spacing:0;font-size:12.5px;width:100%}
 .mx col.rc{width:var(--mc)}
 .mx thead th.corner{position:sticky}
 .cgrip{position:absolute;top:0;right:-3px;bottom:0;width:7px;cursor:col-resize;z-index:5}
@@ -279,7 +279,7 @@ td.tot,th.tot{font:500 12px/1 var(--mono);text-align:right;padding:0 10px;color:
 .rel-grid .rh{position:sticky;left:0;z-index:1;text-align:left;border-right:1px solid var(--rule);min-width:130px}
 .rel-grid thead .rh{z-index:3;padding:7px 10px;font:500 10.5px/1 var(--mono);color:var(--muted)}
 .rel-grid .rh button{all:unset;cursor:pointer;display:flex;gap:6px;align-items:center;padding:6px 10px;width:100%;box-sizing:border-box}
-.rel-grid .colh{min-width:58px}
+.rel-grid .colh{min-width:85px}
 .rel-grid tr.latest .rh{box-shadow:inset 3px 0 0 var(--accent)}
 .rel-grid td.c button{all:unset;cursor:pointer;display:block;width:100%;min-width:58px;padding:6px 0;text-align:center;font:500 12px/1 var(--mono)}
 .rel-grid td.c button.h{background:var(--accent-soft)} .rel-grid td.c button.all{background:var(--take);color:var(--panel)} .rel-grid td.c button.part{box-shadow:inset 0 0 0 2px var(--take)}
@@ -311,9 +311,9 @@ body.dragging{cursor:col-resize;user-select:none}
 /* ---------- round 4 ---------- */
 /* matrix headings: a fixed height, the colour bar always at the top */
 .mx thead th.ch{vertical-align:top;padding:0}
-.colh{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:6px;height:64px;min-height:0;padding:0 4px 6px;font:600 11px/1.15 var(--cond);text-transform:none;letter-spacing:0;color:var(--ink);hyphens:manual;overflow-wrap:normal}
-.colh i{display:block;height:6px;border-radius:0 0 3px 3px;margin:0 -4px}
-.colh span{display:block;text-align:center}
+.colh{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:6px;height:64px;min-height:0;padding:0 4px 6px;font:600 11px/1.15 var(--cond);text-transform:none;letter-spacing:0;color:var(--ink);hyphens:none;overflow-wrap:normal}
+.colh i{display:block;height:6px;border-radius:0 0 3px 3px;margin:0 2px}
+.colh span{display:block;text-align:center;white-space:normal}
 .vc-core{--vc:var(--v-core)} .vc-supporting{--vc:var(--v-supporting)} .vc-specialist{--vc:var(--v-specialist)} .vc-light{--vc:var(--v-light)}
 .ch .colh i{background:var(--vc)}
 .valcol td.c button.h1{background:color-mix(in srgb,var(--vc) 14%,var(--panel))}
@@ -776,7 +776,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   };
   const SETTINGS_DEFAULT = { cellDetail: false, mark: 'square', fileClick: ['details'], totals: false, hideEmpty: true, valueFilter: false, compact: true, toFiles: true, valueColour: true, shadeCells: true,
     detailAt: 'right', dw: 620, dh: 360, theme: 'system', lw: 280, rw: 340, mc: 280, shut: ['show', 'releases', 'types', 'values', 'headings', 'entries', 'runsOn', 'formats', 'since', 'translations'],
-    rails: [false, false], fold: { takes: false, snaps: false, rules: false, files: false }, pfGroup: 'entry' }; // Filters and Profile panels, open or shut on every page alike
+    rails: [false, false], fold: { takes: false, snaps: false, rules: false, files: false }, pfGroup: 'entry', tableLayout: 'auto', minColumnWidth: 85 }; // Filters and Profile panels, open or shut on every page alike
   let SET = clone(SETTINGS_DEFAULT);
   try { const s = JSON.parse(localStorage.getItem('docs-explorer-settings-v7') || 'null'); if (s) SET = Object.assign(SET, s, { rails: Array.isArray(s.rails) ? s.rails : clone(SETTINGS_DEFAULT.rails), fold: Object.assign(clone(SETTINGS_DEFAULT.fold), s.fold || {}) }); } catch (e) { /* storage unavailable */ }
   if (SET.theme === 'cool') SET.theme = 'attractor';
