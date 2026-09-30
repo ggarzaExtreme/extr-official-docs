@@ -194,9 +194,9 @@ pre.yaml{margin:0;padding:10px;background:var(--soft);border-radius:4px;font:11.
 .mx th,.mx td{border-bottom:1px solid var(--rule);padding:0;background:var(--panel)}
 .mx thead th{position:sticky;top:0;z-index:3;background:var(--soft);vertical-align:bottom}
 .mx thead th.corner{left:0;z-index:4;text-align:left;padding:8px 12px;font:500 10.5px/1 var(--mono);color:var(--muted);text-transform:uppercase}
-.colh{all:unset;cursor:pointer;box-sizing:border-box;display:grid;gap:5px;justify-items:center;align-content:end;width:100%;min-height:52px;padding:6px 4px;text-align:center;font:500 10.5px/1.2 var(--mono);text-transform:uppercase;letter-spacing:.02em;color:var(--muted);hyphens:auto}
+.colh{all:unset;cursor:pointer;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;width:100%;min-height:52px;padding:6px 4px;text-align:center;font:500 10.5px/1.2 var(--mono);text-transform:uppercase;letter-spacing:.02em;color:var(--muted);hyphens:none;word-break:break-word;overflow-wrap:break-word}
 .colh:hover{color:var(--accent)}
-.colh i{display:block;width:100%;height:3px;border-radius:2px}
+.colh i{display:block;height:3px;border-radius:2px;margin:0 2px}
 .rowh{position:sticky;left:0;z-index:2;text-align:left;font-weight:400;border-right:1px solid var(--rule)}
 .rowh .in{display:flex;align-items:center;gap:6px;padding:0 6px 0 0}
 .rowh .nmb{all:unset;cursor:pointer;display:flex;gap:8px;align-items:center;flex:1;min-width:0;padding:6px 0 6px 12px}
@@ -557,6 +557,10 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
 .fresh thead th{position:sticky;top:0;background:var(--panel,var(--bg))}
 .dtab th,.dtab td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--soft)}
 .dtab th{font:500 10.5px/1 var(--mono);text-transform:uppercase;color:var(--muted)}
+.dtab-container{display:grid;gap:12px}
+.dtab-container h4{margin:0}
+.dlist{margin:0;padding-left:18px;display:grid;gap:6px;font-size:12.5px}
+.dlist li{display:flex;gap:8px;align-items:center;justify-content:space-between}
 
 .st td.ok .mark{all:unset;cursor:pointer;font:600 14px/1 var(--sans);color:var(--muted);padding:2px 4px;border-radius:4px}
 .st td.ok .mark.on{color:var(--take)}
@@ -771,8 +775,8 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     sel: new Set()
   };
   const SETTINGS_DEFAULT = { cellDetail: false, mark: 'square', fileClick: ['details'], totals: false, hideEmpty: true, valueFilter: false, compact: true, toFiles: true, valueColour: true, shadeCells: true,
-    detailAt: 'right', dw: 620, dh: 360, theme: 'system', lw: 280, rw: 340, mc: 280, shut: ['since'],
-    rails: [true, true], fold: { takes: true, snaps: true, rules: false, files: false }, pfGroup: 'entry' }; // Filters and Profile panels, open or shut on every page alike
+    detailAt: 'right', dw: 620, dh: 360, theme: 'system', lw: 280, rw: 340, mc: 280, shut: ['show', 'releases', 'types', 'values', 'headings', 'entries', 'runsOn', 'formats', 'since', 'translations'],
+    rails: [false, false], fold: { takes: false, snaps: false, rules: false, files: false }, pfGroup: 'entry' }; // Filters and Profile panels, open or shut on every page alike
   let SET = clone(SETTINGS_DEFAULT);
   try { const s = JSON.parse(localStorage.getItem('docs-explorer-settings-v7') || 'null'); if (s) SET = Object.assign(SET, s, { rails: Array.isArray(s.rails) ? s.rails : clone(SETTINGS_DEFAULT.rails), fold: Object.assign(clone(SETTINGS_DEFAULT.fold), s.fold || {}) }); } catch (e) { /* storage unavailable */ }
   if (SET.theme === 'cool') SET.theme = 'attractor';
@@ -1028,8 +1032,8 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       h += facet('runsOn', 'Compatibility', PLATFORMS.map((x) => [x]), rc, extra, f.forRel ? 'hardware for ' + f.forSw + ' ' + f.forRel : f.runsOn.length ? f.runsOn.length + ' platforms' : '');
     }
     h += facet('formats', 'Format', ['pdf', 'zip', 'xlsx', 'video', 'api', 'page', 'file'].map((x) => [x]), counts('formats', (d) => d.format));
-    h += facet('since', 'Published', [], {}, '<select class="in" id="f-since"><option value="0">Any time</option><option value="6">Within 6 months</option><option value="12">Within 12 months</option><option value="24">Within 24 months</option></select>' +
-      '<label class="opt" style="grid-template-columns:auto minmax(0,1fr)"><input type="checkbox" id="f-tr"' + (f.tr ? ' checked' : '') + '><span class="lb"><span>Leave out translations</span></span></label>', (f.since ? 'within ' + f.since + ' months' : '') + (f.tr ? '' : (f.since ? ', ' : '') + 'translations'));
+    h += facet('since', 'Published', [], {}, '<select class="in" id="f-since"><option value="0">Any time</option><option value="6">Within 6 months</option><option value="12">Within 12 months</option><option value="24">Within 24 months</option></select>', (f.since ? 'within ' + f.since + ' months' : ''));
+    h += facet('translations', 'Translations', [], {}, '<label class="opt" style="grid-template-columns:auto minmax(0,1fr)"><input type="checkbox" id="f-tr"' + (f.tr ? ' checked' : '') + '><span class="lb"><span>Leave out translations</span></span></label>', (f.tr ? 'excluded' : 'included'));
     const top = box.scrollTop, focus = document.activeElement && (document.activeElement.id || document.activeElement.dataset.rel);
     box.innerHTML = h; box.scrollTop = top; if ($('f-since')) $('f-since').value = String(f.since);
     if (focus === 'f-q' || focus === 'f-eq') { const el = $(focus); el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
@@ -1536,19 +1540,17 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       }).filter(Boolean).sort((x, y) => x.age - y.age || x.r.n.localeCompare(y.r.n));
       const ageCls = (a) => (a < 3 ? 'v-core' : a < 6 ? 'v-supporting' : 'v-light');
       const freshCard = '<p class="note">Entries with numbered releases and a release published in the last 12 months, by their newest release (' + fresh.length + '). Newest means most recently numbered, not recommended.</p>' +
-        '<div class="fresh"><table class="dtab"><thead><tr><th>Entry</th><th>Heading</th><th>Newest Release</th><th>Published</th><th>Age</th><th>Releases in 12 Months</th></tr></thead><tbody>' +
-        fresh.map((x) => '<tr><td><button class="lnk" type="button" data-detail="' + x.r.i + '">' + esc(x.r.n) + '</button></td><td class="muted">' + esc(x.r.h) + '</td><td class="mono">' + esc(x.top) + '</td><td class="mono">' + esc(x.m) + '</td><td class="mono"><i class="sq ' + ageCls(x.age) + '"></i> ' + (x.age ? x.age + ' mo' : 'this month') + '</td><td class="mono">' + x.year + '</td></tr>').join('') + '</tbody></table></div>';
+        '<div class="fresh"><table class="dtab"><thead><tr><th>Entry</th><th>Heading</th><th>Newest Release</th><th>Published</th><th>Age</th><th>Releases in 12 Months</th><th>Documents</th></tr></thead><tbody>' +
+        fresh.map((x) => '<tr><td><button class="lnk" type="button" data-detail="' + x.r.i + '">' + esc(x.r.n) + '</button></td><td class="muted">' + esc(x.r.h) + '</td><td class="mono">' + esc(x.top) + '</td><td class="mono">' + esc(x.m) + '</td><td class="mono"><i class="sq ' + ageCls(x.age) + '"></i> ' + (x.age ? x.age + ' mo' : 'this month') + '</td><td class="mono">' + x.year + '</td><td class="mono">' + fmt(x.r.edocs.length) + '</td></tr>').join('') + '</tbody></table></div>';
       const card = (title, body, wide) => '<section class="dcard' + (wide ? ' wide' : '') + '"><h3>' + title + '</h3>' + body + '</section>';
       h += '<div class="facts">' + FACTS.concat(FUN).map(([v, s]) => '<div class="fact"><span class="v">' + esc(v) + '</span><small>' + esc(s) + '</small></div>').join('') + '</div>' +
         '<div class="dgrid">' +
         card('Documents by Type', bars(byType, '')) +
         card('Documents by Docs-Site Heading', bars(byHead, 'v-core')) +
         card('Published per Year', '<div class="years">' + ys.map((y) => '<div class="yr" title="' + y + ': ' + fmt(years[y]) + '"><b style="height:' + (years[y] / ymax * 100) + '%"></b><span>' + y.slice(2) + '</span></div>').join('') + '</div><p class="note">Years with a stated publish month; the most recent ' + ys.length + ' shown.</p>') +
-        card('Freshness', freshCard, true) +
-        card('Most Documents', '<ol class="dlist">' + top.map((r) => '<li><button class="lnk" type="button" data-detail="' + r.i + '">' + esc(r.n) + '</button><span class="mono muted">' + fmt(r.edocs.length) + '</span></li>').join('') + '</ol>') +
-        card('Recently Updated', '<ol class="dlist">' + recent.map(([r, d]) => '<li><button class="lnk" type="button" data-detail="' + r.i + '">' + esc(r.n) + '</button><span class="mono muted">' + esc(d.m) + '</span></li>').join('') + '</ol>') +
         card('Starter Profiles', '<table class="dtab"><thead><tr><th>Profile</th><th>Entries</th><th>Files</th><th></th></tr></thead><tbody>' + STARTERS.map((n) => '<tr><td>' + esc(n) + '</td><td class="mono">' + starterRows[n].size + '</td><td class="mono">' + fmt(files(takenBy(P[n]))) + '</td><td><button class="btn ghost small" type="button" data-use="' + esc(n) + '">Use</button></td></tr>').join('') + '</tbody></table>') +
         card('Snapshots and Compatibility', '<p class="note">' + fmt(SNAPS.length) + ' support pages kept whole, with ' + fmt(SNAPS.reduce((n, s) => n + s.tables, 0)) + ' tables.</p><p class="note">Compatibility: ' + PLATFORMS.length + ' hardware platforms with stated support for ' + esc(SOFTWARE.join(', ')) + ', from ' + SOURCES.length + ' support tables.</p><div class="acts2">' + PLATFORMS.map((x) => '<button class="btn ghost small" type="button" data-detail="' + BY_NAME[x].i + '">' + esc(x) + '</button>').join('') + '</div>') +
+        card('Entries Overview', freshCard, true) +
         '</div>';
       const box = $('results'), top0 = box.scrollTop; box.innerHTML = h; box.scrollTop = top0;
       box.onclick = (e) => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.detail) openEntry(ROWS[+b.dataset.detail]); else if (b.dataset.use) loadProfile(starterProfile(b.dataset.use), b.dataset.use, 's:' + b.dataset.use); };
