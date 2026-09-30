@@ -479,6 +479,7 @@ td.c button.sqm.all{box-shadow:inset 0 0 0 3px var(--take)}
 td.c button.sqm.all .cn{color:var(--take);font-weight:700}
 .valcol td.c button.h3.all{color:var(--ink)}
 td.c button:not(.rm) .ring{display:none}
+td.c button.rm.sqm{box-shadow:none}
 .rel-grid td.c button.all{background:var(--accent-soft)}
 /* details only on hover, in reserved space, so nothing shifts */
 .rowh .info{opacity:0;transition:opacity .12s}
@@ -774,9 +775,9 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       checkout: { group: 'row', show: 'kept' } },
     sel: new Set()
   };
-  const SETTINGS_DEFAULT = { cellDetail: false, mark: 'square', fileClick: ['details'], totals: false, hideEmpty: true, valueFilter: false, compact: true, toFiles: true, valueColour: true, shadeCells: true,
+  const SETTINGS_DEFAULT = { cellDetail: false, mark: 'frame', fileClick: ['details'], totals: false, hideEmpty: true, valueFilter: false, compact: true, toFiles: true, valueColour: true, shadeCells: true,
     detailAt: 'right', dw: 620, dh: 360, theme: 'system', lw: 280, rw: 340, mc: 280, shut: ['show', 'releases', 'types', 'values', 'headings', 'entries', 'runsOn', 'formats', 'since', 'translations'],
-    rails: [false, false], fold: { takes: false, snaps: false, rules: false, files: false }, pfGroup: 'entry', tableLayout: 'auto', minColumnWidth: 85 }; // Filters and Profile panels, open or shut on every page alike
+    rails: [false, false], fold: { takes: false, snaps: false, rules: false, files: false }, pfGroup: 'entry', minColumnWidth: 85 }; // Filters and Profile panels, open or shut on every page alike
   let SET = clone(SETTINGS_DEFAULT);
   try { const s = JSON.parse(localStorage.getItem('docs-explorer-settings-v7') || 'null'); if (s) SET = Object.assign(SET, s, { rails: Array.isArray(s.rails) ? s.rails : clone(SETTINGS_DEFAULT.rails), fold: Object.assign(clone(SETTINGS_DEFAULT.fold), s.fold || {}) }); } catch (e) { /* storage unavailable */ }
   if (SET.theme === 'cool') SET.theme = 'attractor';
@@ -936,9 +937,9 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     $('egg').onclick = () => { if (SET.theme === 'attractor') SET.theme = 'system'; else { SET.theme = 'attractor'; toast('You found it. Knobs are bottom left.'); } saveSettings(); applyTheme(); render(); };
   }
   const heat = (n) => (n >= 10 ? 'h3' : n >= 3 ? 'h2' : 'h1');
-  const ring = (k, n) => (k && SET.mark === 'ring' ? '<span class="ring" style="--p:' + Math.round(k / n * 100) + '"></span>' : '') + '<span class="cn">' + n + '</span>';
+  const ring = (k, n) => (k && (SET.mark === 'ring' || SET.mark === 'both') ? '<span class="ring" style="--p:' + Math.round(k / n * 100) + '"></span>' : '') + '<span class="cn">' + n + '</span>';
   const markCls = (k, n) => (k ? ' sqm' + (k === n ? ' all' : ' part') : '');
-  const markSty = (k, n) => (k && SET.mark !== 'ring' ? ' style="--p:' + Math.round(k / n * 100) + '"' : '');
+  const markSty = (k, n) => (k && (SET.mark === 'frame' || SET.mark === 'both') ? ' style="--p:' + Math.round(k / n * 100) + '"' : '');
   function grip(el, onMove, onEnd) { // drag helper: onMove(dx, dy) from the press point
     el.onpointerdown = (e) => {
       e.preventDefault(); e.stopPropagation();
@@ -1725,24 +1726,34 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   $('b-legend').onclick = (e) => openPop(e.currentTarget, (pop) => {
     pop.innerHTML = '<h4>Value of a Document Type</h4>' + VALUES.map((v) => '<div class="row"><i class="sq v-' + v + '" style="width:22px;height:8px"></i><b>' + v + '</b><span class="muted">' + VALUE_MEANS[v] + '</span></div>').join('') +
       '<p class="note">A column\'s colour is its type\'s value. Our judgement, set in <span class="mono">config/types.yaml</span>.</p>' +
-      '<h4>Counts</h4><div class="row"><i class="sw h2"></i>documents there; darker means more</div><div class="row"><i class="sw all"></i>the profile takes them all</div><div class="row"><i class="sw part"></i>the profile takes some</div>' +
-      '<h4>Marks</h4><div class="row"><b style="color:var(--take);width:22px;text-align:center">✓</b>in the profile</div><div class="row"><b style="width:22px;text-align:center">○</b>not in the profile</div><div class="row"><span class="chip">latest</span>in the entry\'s newest release</div>';
+      '<h4>Selection Marks</h4>' +
+      '<p class="note" style="margin-bottom:8px">How count selections are shown. Mark intensity increases as more documents are included:</p>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px">' +
+      '<div><b style="font-size:11px">Frame</b><div class="row" style="margin-bottom:4px"><i style="width:20px;height:20px;border:1px solid var(--take);border-radius:2px;display:block;background:var(--panel);opacity:0.4"></i>1 doc</div><div class="row" style="margin-bottom:4px"><i style="width:20px;height:20px;border:2px solid var(--take);border-radius:2px;display:block;background:var(--panel);opacity:0.7"></i>some</div><div class="row"><i style="width:20px;height:20px;border:3px solid var(--take);border-radius:2px;display:block;background:var(--panel)"></i>all</div></div>' +
+      '<div><b style="font-size:11px">Ring</b><div class="row" style="margin-bottom:4px"><svg width="20" height="20" viewBox="0 0 20 20" style="display:block"><g transform="rotate(-90 10 10)"><circle cx="10" cy="10" r="8" fill="none" stroke="var(--take)" stroke-width="2" stroke-dasharray="12.57 37.7"/></g></svg><span style="opacity:0.5">1 doc</span></div><div class="row" style="margin-bottom:4px"><svg width="20" height="20" viewBox="0 0 20 20" style="display:block"><g transform="rotate(-90 10 10)"><circle cx="10" cy="10" r="8" fill="none" stroke="var(--take)" stroke-width="2" stroke-dasharray="42.73 7.57"/></g></svg><span style="opacity:0.75">some</span></div><div class="row"><svg width="20" height="20" viewBox="0 0 20 20" style="display:block"><circle cx="10" cy="10" r="8" fill="none" stroke="var(--take)" stroke-width="2"/></svg>all</div></div></div>' +
+      '<h4>Symbols</h4><div class="row"><b style="color:var(--take);width:22px;text-align:center">✓</b>in the profile</div><div class="row"><b style="width:22px;text-align:center">○</b>not in the profile</div><div class="row"><span class="chip">latest</span>in the entry\'s newest release</div>';
   });
   $('b-settings').onclick = (e) => openPop(e.currentTarget, (pop) => {
     const t = (k, label) => '<label class="opt" style="grid-template-columns:auto minmax(0,1fr)"><input type="checkbox" data-set="' + k + '"' + (SET[k] ? ' checked' : '') + '><span>' + label + '</span></label>';
     const r = (name, k, opts) => '<div class="radios">' + opts.map(([v, l]) => '<label><input type="radio" name="' + name + '" data-setr="' + k + '" value="' + v + '"' + (SET[k] === v ? ' checked' : '') + '>' + l + '</label>').join('') + '</div>';
     pop.innerHTML = '<h4>Theme</h4>' + r('theme', 'theme', [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']].concat(SET.theme === 'attractor' ? [['attractor', 'Strange Attractor']] : [])) +
       '<h4>Matrix</h4>' + t('toFiles', 'Rows open down to single files') + t('valueColour', 'Colour counts by their column\'s value') + t('shadeCells', 'Group shading reaches across the counts') + t('totals', 'Show totals') + t('hideEmpty', 'Hide empty columns') +
-      '<h4>Marking What the Profile Takes</h4>' + r('mark', 'mark', [['square', 'A frame around the count, stronger as it fills'], ['ring', 'A ring around the count']]) +
-      '<h4>Clicking</h4>' + t('cellDetail', 'A count opens its details (instead of adding it)') +
-      '<p class="note">Clicking a single file\'s title (the Matrix\'s last level, and Search):</p>' + [['details', 'opens its details'], ['open', 'opens the file'], ['toggle', 'adds it or takes it out'], ['copy', 'copies its link']].map(([v, l]) => '<label class="opt" style="grid-template-columns:auto minmax(0,1fr)"><input type="checkbox" data-fc="' + v + '"' + (SET.fileClick.includes(v) ? ' checked' : '') + '><span>' + l + '</span></label>').join('') +
-      '<h4>Details</h4>' + r('dat', 'detailAt', [['right', 'Open at the right'], ['bottom', 'Open at the bottom']]) +
+      '<label class="opt" style="grid-template-columns:auto minmax(0,1fr)"><span>Min column width (px):</span><input type="number" id="minColumnWidth" min="50" max="150" value="' + SET.minColumnWidth + '" style="width:60px;padding:4px 6px"></label>' +
+      '<h4>Profile Selection</h4><p class="note" style="margin-bottom:4px">Mark style:</p>' + r('mark', 'mark', [['frame', 'Frame'], ['ring', 'Ring']]) +
+      t('cellDetail', 'A count opens its details (instead of adding it)') +
+      '<p class="note" style="margin-top:8px;margin-bottom:4px">A file\'s title does:</p>' + [['details', 'Open details'], ['open', 'Open file'], ['toggle', 'Toggle in profile'], ['copy', 'Copy link']].map(([v, l]) => '<label class="opt" style="grid-template-columns:auto minmax(0,1fr)"><input type="checkbox" data-fc="' + v + '"' + (SET.fileClick.includes(v) ? ' checked' : '') + '><span>' + l + '</span></label>').join('') +
+      '<h4>Details Panel</h4>' + r('dat', 'detailAt', [['right', 'Open at the right'], ['bottom', 'Open at the bottom']]) +
       '<h4>Tables</h4>' + t('compact', 'One line per row (long titles cut short)') +
       '<h4>Filters</h4>' + t('valueFilter', 'Value can also filter (not only colour and order)') + '<button class="btn ghost small" type="button" id="set-reset">Reset Settings</button><p class="note">Remembered in this browser.</p>';
     pop.onchange = (ev) => {
       const x = ev.target;
+      if (x.id === 'minColumnWidth') { SET.minColumnWidth = parseInt(x.value) || 85; applyMatrixLayout(); saveSettings(); return; }
       if (x.dataset.fc) SET.fileClick = x.checked ? [...new Set(SET.fileClick.concat([x.dataset.fc]))] : SET.fileClick.filter((v) => v !== x.dataset.fc);
-      else if (x.dataset.setr) { SET[x.dataset.setr] = x.value; if (x.dataset.setr === 'theme') applyTheme(); }
+      else if (x.dataset.setr) {
+        SET[x.dataset.setr] = x.value;
+        if (x.dataset.setr === 'theme') applyTheme();
+        if (x.dataset.setr === 'tableLayout') applyMatrixLayout();
+      }
       else { SET[x.dataset.set] = x.checked; if (!SET.valueFilter) S.f.values = []; }
       saveSettings(); render();
     };
@@ -1833,6 +1844,12 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     fxPanel();
   }
 
+  function applyMatrixLayout() {
+    let style = document.getElementById('matrix-layout-style');
+    if (!style) { style = document.createElement('style'); style.id = 'matrix-layout-style'; document.head.appendChild(style); }
+    style.textContent = '.mx { table-layout: fixed; } .mx table { table-layout: fixed; } .rel-grid .colh { min-width: ' + SET.minColumnWidth + 'px; }';
+  }
+
   // ---------- routing and render ----------
   const PAGES = ['dashboard', 'matrix', 'search', 'browse', 'checkout'];
   function go(page) { S.page = page; history.replaceState(null, '', '#/' + page); render(); }
@@ -1856,6 +1873,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   window.addEventListener('resize', () => { if (S.page === 'matrix') renderMatrix(); });
   document.querySelectorAll('.tabs a').forEach((a) => { a.onclick = (e) => { e.preventDefault(); go(a.dataset.page); }; });
   applyTheme();
+  applyMatrixLayout();
   readHash();
   render();
   window.EXPLORER = { S, P, DOCS, ROWS, SNAPS, takenBy, unknownEntries, toYaml, toRules, fromRules, relSet }; // for checking only
