@@ -772,7 +772,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   };
   const SETTINGS_DEFAULT = { cellDetail: false, mark: 'square', fileClick: ['details'], totals: false, hideEmpty: true, valueFilter: false, compact: true, toFiles: true, valueColour: true, shadeCells: true,
     detailAt: 'right', dw: 620, dh: 360, theme: 'system', lw: 280, rw: 340, mc: 280, shut: ['since'],
-    rails: [true, true], fold: { takes: true, snaps: true, rules: false, files: false }, pfGroup: 'entry' }; // Filters and Profile panels, open or shut on every page alike
+    rails: [true, true], fold: { takes: true, snaps: true, rules: false, files: false }, pfGroup: 'entry', introDismissed: false }; // Filters and Profile panels, open or shut on every page alike
   let SET = clone(SETTINGS_DEFAULT);
   try { const s = JSON.parse(localStorage.getItem('docs-explorer-settings-v7') || 'null'); if (s) SET = Object.assign(SET, s, { rails: Array.isArray(s.rails) ? s.rails : clone(SETTINGS_DEFAULT.rails), fold: Object.assign(clone(SETTINGS_DEFAULT.fold), s.fold || {}) }); } catch (e) { /* storage unavailable */ }
   if (SET.theme === 'cool') SET.theme = 'attractor';
@@ -877,8 +877,10 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     if (p.skip && p.skip.length) y += 'skip:\n' + p.skip.map((u) => '  - ' + u + '\n').join('');
     return y;
   }
-  const enc = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o))));
-  const dec = (s) => { try { return JSON.parse(decodeURIComponent(escape(atob(s)))); } catch (e) { return null; } };
+  // base64url: URLSearchParams decodes a literal '+' as a space, which corrupts plain
+  // base64 payloads that happen to contain one; -/_ with no padding survives intact.
+  const enc = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const dec = (s) => { try { return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g, '+').replace(/_/g, '/'))))); } catch (e) { return null; } };
   function loadProfile(p, name, key) { S.profile = Object.assign({ filters: [] }, clone(p)); S.pname = name; S.loaded = key || ''; S.modified = false; render(); }
   const starterProfile = (n) => ({ about: P[n].about, filters: P[n].filters, snapshots: P[n].snapshots || [] });
   function copy(text, msg) { const ok = () => toast(msg || 'Copied'); try { navigator.clipboard.writeText(text).then(ok, () => prompt('Copy:', text)); } catch (e) { prompt('Copy:', text); } }
@@ -889,6 +891,9 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
 
   // ---------- filters ----------
   const F = () => S.f;
+  // every word in q must appear somewhere in text, so word order/adjacency doesn't matter
+  // (e.g. "33.7 release notes" matches "ExtremeXOS v33.7.1 Release Notes")
+  const matchesQuery = (text, q) => !q || q.trim().toLowerCase().split(/\s+/).every((w) => text.includes(w));
   function pass(d, skip) {
     const f = F();
     if (!f.sites.includes(d.r.site)) return false;
@@ -904,8 +909,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     if (skip !== 'formats' && f.formats.length && !f.formats.includes(d.format)) return false;
     if (skip !== 'runsOn' && f.runsOn.length) { const ro = runsOn(d); if (ro ? !ro.some((x) => f.runsOn.includes(x)) : !d.er.some((x) => f.runsOn.includes(x.n))) return false; }
     if (skip !== 'forRel' && f.forRel) { const plats = platformsFor(f.forSw, f.forRel); if (swOf(d.r.n).includes(f.forSw) ? !sameLine(d.rel, f.forRel) : !d.er.some((x) => plats.includes(x.n))) return false; }
-    const t = f.q.trim().toLowerCase();
-    return !t || d.t.toLowerCase().includes(t) || d.r.n.toLowerCase().includes(t);
+    return matchesQuery((d.t + ' ' + d.r.n).toLowerCase(), f.q);
   }
   const counts = (key, fn) => { const c = {}; DOCS.forEach((d) => { if (pass(d, key)) { const k = fn(d); c[k] = (c[k] || 0) + 1; } }); return c; };
   const relDefault = (R) => !R.all && R.presets.length === 1 && R.presets[0] === 'latest' && !R.newest && !R.from && !R.to && !R.specific.length;
@@ -1096,7 +1100,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     const bridge = asFilter(), empty = !Object.keys(bridge).length;
     $('chips').innerHTML = chips.map((c, i) => '<span class="c">' + esc(c[0]) + '<button type="button" data-chip="' + i + '" aria-label="Remove">×</button></span>').join('') +
       '<button class="btn ghost small" type="button" id="c-clear">Clear All</button>' +
-      '<button class="btn small" type="button" id="c-add"' + (empty ? ' disabled' : ' title="Adds: ' + esc(describe(bridge).join(' · ')) + (f.q ? ' (the search text is not saved)' : '') + (f.runsOn.length || f.forRel ? ' (Compatibility narrows what you see; it is not saved)' : '') + '"') + '>+ Add These</button>' +
+      '<button class="btn small" type="button" id="c-add"' + (empty ? ' disabled' : ' title="Adds a rule: ' + esc(describe(bridge).join(' · ')) + '. Future matching files join automatically.' + (f.q ? ' (the search text is not saved)' : '') + (f.runsOn.length || f.forRel ? ' (Compatibility narrows what you see; it is not saved)' : '') + '"') + '>Add Current Filter to Profile</button>' +
       '<button class="btn ghost small" type="button" id="c-link">Link to This View</button>';
     $('chips').onclick = (e) => {
       const b = e.target.closest('button'); if (!b) return;
@@ -1144,7 +1148,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     const el = $('p-files'); if (!el || !SET.fold.files) return;
     onDocs = onDocs || [...new Map(DOCS.filter((d) => S.taken.has(d.id)).map((d) => [d.url, d])).values()];
     const q = pFiles.q.trim().toLowerCase();
-    const ds = onDocs.filter((d) => !q || d.t.toLowerCase().includes(q) || d.er[0].n.toLowerCase().includes(q) || d.type.toLowerCase().includes(q));
+    const ds = onDocs.filter((d) => matchesQuery((d.t + ' ' + d.er[0].n + ' ' + d.type).toLowerCase(), q));
     const key = SET.pfGroup === 'type' ? (d) => d.type : SET.pfGroup === 'entry' ? (d) => d.er[0].n : () => '';
     const groups = new Map(); ds.slice().sort((a, b) => a.t.localeCompare(b.t)).forEach((d) => { const k = key(d); (groups.get(k) || groups.set(k, []).get(k)).push(d); });
     const order = [...groups].sort((a, b) => (SET.pfGroup === 'type' ? TYPES.indexOf(a[0]) - TYPES.indexOf(b[0]) : a[0].localeCompare(b[0])));
@@ -1184,7 +1188,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     else if (b.dataset.rmsnap) toggleSnap(b.dataset.rmsnap);
     else if (b.id === 's-unskip') { S.profile.skip = []; changed(); }
     else if (b.id === 'p-save') saveProfile();
-    else if (b.id === 'p-link') copy(base() + '#/' + S.page + '?p=' + enc({ n: S.pname, p: S.profile }), 'Link to this profile copied');
+    else if (b.id === 'p-link') copy(base() + '#/checkout?p=' + enc({ n: S.pname, p: S.profile }), 'Link to this profile copied');
     else if (b.id === 'p-checkout') go('checkout');
     else if (b.id === 'p-fall') { pFiles.all = true; renderProfileFiles(); }
     else if (b.dataset.entry) openEntry(ROWS[+b.dataset.entry]);
@@ -1425,15 +1429,18 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     if (!kept.length && !snaps.length) h += '<p class="muted">The profile is empty. Pick a starter profile in the profile panel, or add from Matrix, Search or Browse.</p>';
     else h += '<section class="get wide"><div class="gethead"><h3>Get These Files</h3>' +
       '<div class="radios row">' + chk('docs', 'Documents <span class="mono muted">' + fmt(kept.length) + '</span>') + chk('snaps', 'Snapshots <span class="mono muted">' + snaps.length + '</span>') +
-      '<span class="sep"></span><span class="muted">Snapshot format</span>' + rad('csv', 'CSV') + rad('md', 'Markdown') + rad('both', 'Both') + '</div></div>' +
+      '<span class="sep"></span><span class="muted">Snapshot format</span>' + rad('csv', 'CSV') + rad('md', 'Markdown') + rad('both', 'Both') + '</div>' +
+      '<p class="note">Most of these files live on a server that blocks direct downloads from a web page — a browser security rule, not a bug here — so getting everything in one go needs a small script run on your own computer instead. That script (below) only fetches the files listed on this page; it does not re-scan Extreme\'s sites. <a href="' + REPO + '#how-it-works" target="_blank" rel="noopener">How this all works ↗</a></p></div>' +
       '<div class="getgrid">' +
       '<div class="way best"><span class="tag">Recommended</span><h4>1. The Scanner</h4><p class="note">Gets all ' + fmt(kept.length) + ' documents' + (snaps.length ? ' and ' + snaps.length + ' snapshots' : '') + ', including the PDF inside each of the ' + fmt(guides.length) + ' HTML guides. It checks every file and, run again later, fetches only what changed.</p>' +
       '<ol class="steps"><li><button class="btn small" type="button" data-get="save">Save the Profile</button> <span class="muted mono">' + esc(fileName()) + '.yaml</span></li>' +
-      '<li>Copy the command, and run it from a clone of this repo:<code id="p-cmd">python scanner/scan.py --library &lt;your folder&gt; update --profile ' + esc(fileName()) + '.yaml</code><button class="btn ghost small" type="button" data-get="cmd">Copy the Command</button></li></ol></div>' +
+      '<li>Copy the command, and run it from a clone of this repo:<code id="p-cmd">python scanner/scan.py --library &lt;your folder&gt; update --profile ' + esc(fileName()) + '.yaml</code><button class="btn ghost small" type="button" data-get="cmd">Copy the Command</button></li></ol>' +
+      '<details class="leftout"><summary>New to this? A couple of ways in</summary><p class="note">Don\'t have Python set up? Install it free from <a href="https://python.org" target="_blank" rel="noopener">python.org</a> — or paste the command above (and the saved profile file) to an AI coding assistant (Claude Code, GitHub Copilot, Cursor, etc.) and ask it to run the download for you. Either way, this step only downloads the files listed on this page, using the catalog this site already built — it\'s not a fresh scan of Extreme\'s sites. If that\'s more setup than you want right now, Methods 2 and 3 below need nothing installed.</p></details></div>' +
       '<div class="way"><h4>2. Download Here</h4><p class="note">The page can fetch ' + (GET.docs ? fmt(hub.length) + ' main-site files' : 'no documents') + (GET.snaps ? ' and ' + nSnapFiles + ' snapshot files' : '') + '. ' +
       (direct + guides.length ? 'The ' + fmt(direct + guides.length) + ' docs-site files can\'t be fetched by a page (their server doesn\'t allow it): open them from the list below, or use the scanner.' : '') + ' Your browser may ask to allow several downloads.</p>' +
       '<button class="btn" type="button" data-get="here"' + (hereN ? '' : ' disabled') + '>' + (hereN ? 'Download ' + fmt(hereN) + ' Files Here' : 'Nothing Here to Download') + '</button></div>' +
-      '<div class="way"><h4>3. The Link List</h4><p class="note">A text file with all ' + fmt(kept.length) + ' links, for any download tool.</p><button class="btn ghost" type="button" data-get="list">Download the Link List</button></div>' +
+      '<div class="way"><h4>3. The Link List</h4><p class="note">All ' + fmt(kept.length) + ' links, as a plain list for any download tool, or a spreadsheet with title, entry, type and release.</p>' +
+      '<button class="btn ghost" type="button" data-get="list">Download the Link List</button> <button class="btn ghost" type="button" data-get="list-csv">Download as a Spreadsheet</button></div>' +
       '</div></section>';
     h += '<div class="totals">' + [[fmt(kept.length), 'files'], [fmt(hub.length), 'main-site files: download here'], [fmt(direct), 'docs-site files: open each, or the scanner'], [fmt(guides.length), 'HTML guides: the scanner finds the PDF'], [fmt(snaps.length), 'snapshots: download here']]
       .map(([v, l]) => '<div class="fact"><span class="v">' + v + '</span><small>' + l + '</small></div>').join('') + '</div>';
@@ -1448,11 +1455,18 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     wireTable(box, V, groups);
     box.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.snap) openSnap(b.dataset.snap); else if (b.dataset.rmsnap) toggleSnap(b.dataset.rmsnap); });
   }
+  const csvCell = (v) => /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  const csvRow = (vals) => vals.map(csvCell).join(',') + '\n';
   async function runGet(what, btn) {
     const kept = [...new Map(DOCS.filter((d) => S.taken.has(d.id)).map((d) => [d.url, d])).values()];
     if (what === 'save') return saveProfile();
     if (what === 'cmd') return copy($('p-cmd').textContent, 'Command copied');
     if (what === 'list') { saveBlob(fileName() + '-links.txt', new Blob([kept.map((d) => d.url).join('\n') + '\n'], { type: 'text/plain' })); return toast(fmt(kept.length) + ' links saved'); }
+    if (what === 'list-csv') {
+      const rows = csvRow(['title', 'entry', 'type', 'release', 'url']) + kept.map((d) => csvRow([d.t, d.r.n, d.type, d.rel || '', d.url])).join('');
+      saveBlob(fileName() + '-links.csv', new Blob([rows], { type: 'text/csv' }));
+      return toast(fmt(kept.length) + ' links saved');
+    }
     const jobs = [];
     if (GET.docs) kept.filter((d) => d.via === 'content_hub').forEach((d) => jobs.push([d.url, d.t.replace(/[\\/:*?"<>|]+/g, ' ') + '.pdf']));
     if (GET.snaps) (S.profile.snapshots || []).filter((n) => SNAP[n]).forEach((n) => {
@@ -1478,7 +1492,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   function renderBrowse() {
     const V = S.v.browse;
     const dash = S.page === 'dashboard';
-    $('vctl').innerHTML = '<span class="note">' + (dash ? 'The catalog at a glance. Anything named opens its details.' : 'Choose a path; what it holds shows underneath.') + '</span>';
+    $('vctl').innerHTML = '<span class="note">' + (dash ? 'The catalog at a glance.' : 'Choose a path; what it holds shows underneath.') + '</span>';
     const newestOf = (r) => r.docs.reduce((m, d) => (d.m > m ? d.m : m), '');
     const PATHS = [
       ['Starter Profiles', 'Ready-made selections', STARTERS.map((n) => ['p:' + n, n, ROWS.filter((r) => starterRows[n].has(r))])],
@@ -1539,6 +1553,12 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
         '<div class="fresh"><table class="dtab"><thead><tr><th>Entry</th><th>Heading</th><th>Newest Release</th><th>Published</th><th>Age</th><th>Releases in 12 Months</th></tr></thead><tbody>' +
         fresh.map((x) => '<tr><td><button class="lnk" type="button" data-detail="' + x.r.i + '">' + esc(x.r.n) + '</button></td><td class="muted">' + esc(x.r.h) + '</td><td class="mono">' + esc(x.top) + '</td><td class="mono">' + esc(x.m) + '</td><td class="mono"><i class="sq ' + ageCls(x.age) + '"></i> ' + (x.age ? x.age + ' mo' : 'this month') + '</td><td class="mono">' + x.year + '</td></tr>').join('') + '</tbody></table></div>';
       const card = (title, body, wide) => '<section class="dcard' + (wide ? ' wide' : '') + '"><h3>' + title + '</h3>' + body + '</section>';
+      if (!SET.introDismissed) h += '<section class="dcard wide" style="margin:4px 0 14px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3>New Here?</h3><button class="btn ghost small" type="button" data-intro="dismiss" aria-label="Dismiss">×</button></div>' +
+        '<ul class="dlist" style="list-style:none;padding-left:0">' +
+        '<li><button class="lnk" type="button" data-intro="matrix">See every document type at a glance →</button></li>' +
+        '<li><button class="lnk" type="button" data-intro="search">Find the latest release notes →</button></li>' +
+        '<li><button class="lnk" type="button" data-intro="browse">Browse by entry, heading or platform →</button></li>' +
+        '</ul></section>';
       h += '<div class="facts">' + FACTS.concat(FUN).map(([v, s]) => '<div class="fact"><span class="v">' + esc(v) + '</span><small>' + esc(s) + '</small></div>').join('') + '</div>' +
         '<div class="dgrid">' +
         card('Documents by Type', bars(byType, '')) +
@@ -1551,7 +1571,15 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
         card('Snapshots and Compatibility', '<p class="note">' + fmt(SNAPS.length) + ' support pages kept whole, with ' + fmt(SNAPS.reduce((n, s) => n + s.tables, 0)) + ' tables.</p><p class="note">Compatibility: ' + PLATFORMS.length + ' hardware platforms with stated support for ' + esc(SOFTWARE.join(', ')) + ', from ' + SOURCES.length + ' support tables.</p><div class="acts2">' + PLATFORMS.map((x) => '<button class="btn ghost small" type="button" data-detail="' + BY_NAME[x].i + '">' + esc(x) + '</button>').join('') + '</div>') +
         '</div>';
       const box = $('results'), top0 = box.scrollTop; box.innerHTML = h; box.scrollTop = top0;
-      box.onclick = (e) => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.detail) openEntry(ROWS[+b.dataset.detail]); else if (b.dataset.use) loadProfile(starterProfile(b.dataset.use), b.dataset.use, 's:' + b.dataset.use); };
+      box.onclick = (e) => {
+        const b = e.target.closest('button'); if (!b) return;
+        if (b.dataset.detail) openEntry(ROWS[+b.dataset.detail]);
+        else if (b.dataset.use) loadProfile(starterProfile(b.dataset.use), b.dataset.use, 's:' + b.dataset.use);
+        else if (b.dataset.intro === 'dismiss') { SET.introDismissed = true; saveSettings(); render(); }
+        else if (b.dataset.intro === 'matrix') go('matrix');
+        else if (b.dataset.intro === 'search') { S.f = Object.assign(DEFAULT_F(), { q: 'release notes' }); go('search'); }
+        else if (b.dataset.intro === 'browse') go('browse');
+      };
       return;
     }
     // the paths: the first level, side by side
