@@ -160,6 +160,8 @@ input[type=search],select.in{padding:6px 9px;border:1px solid var(--rule);border
 .pp-head{display:grid;gap:8px}
 .pp-head select{padding:7px 10px;border:1px solid var(--rule);border-radius:6px;background:var(--panel);font-weight:600;width:100%}
 .pp-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+/* reusable: draws the eye to a control worth noticing but easy to miss */
+.cue{border-color:var(--accent)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
 .big{font:500 26px/1 var(--mono)}
 .vbars{display:grid;gap:4px}
 .vbars div{display:grid;grid-template-columns:84px minmax(0,1fr) 40px;gap:8px;align-items:center;font-size:12px}
@@ -186,7 +188,7 @@ pre.yaml{margin:0;padding:10px;background:var(--soft);border-radius:4px;font:11.
 
 /* ---------- matrix: fills the width it has ---------- */
 .mx{border:1px solid var(--rule);border-radius:6px;background:var(--panel);overflow:auto}
-.mx table{border-collapse:separate;border-spacing:0;font-size:12.5px;width:100%;table-layout:fixed}
+.mx table{border-collapse:separate;border-spacing:0;font-size:12.5px;width:100%}
 .mx col.rc{width:var(--mc)}
 .mx thead th.corner{position:sticky}
 .cgrip{position:absolute;top:0;right:-3px;bottom:0;width:7px;cursor:col-resize;z-index:5}
@@ -279,7 +281,7 @@ td.tot,th.tot{font:500 12px/1 var(--mono);text-align:right;padding:0 10px;color:
 .rel-grid .rh{position:sticky;left:0;z-index:1;text-align:left;border-right:1px solid var(--rule);min-width:130px}
 .rel-grid thead .rh{z-index:3;padding:7px 10px;font:500 10.5px/1 var(--mono);color:var(--muted)}
 .rel-grid .rh button{all:unset;cursor:pointer;display:flex;gap:6px;align-items:center;padding:6px 10px;width:100%;box-sizing:border-box}
-.rel-grid .colh{min-width:58px}
+.rel-grid .colh{min-width:85px}
 .rel-grid tr.latest .rh{box-shadow:inset 3px 0 0 var(--accent)}
 .rel-grid td.c button{all:unset;cursor:pointer;display:block;width:100%;min-width:58px;padding:6px 0;text-align:center;font:500 12px/1 var(--mono)}
 .rel-grid td.c button.h{background:var(--accent-soft)} .rel-grid td.c button.all{background:var(--take);color:var(--panel)} .rel-grid td.c button.part{box-shadow:inset 0 0 0 2px var(--take)}
@@ -311,9 +313,9 @@ body.dragging{cursor:col-resize;user-select:none}
 /* ---------- round 4 ---------- */
 /* matrix headings: a fixed height, the colour bar always at the top */
 .mx thead th.ch{vertical-align:top;padding:0}
-.colh{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:6px;height:64px;min-height:0;padding:0 4px 6px;font:600 11px/1.15 var(--cond);text-transform:none;letter-spacing:0;color:var(--ink);hyphens:manual;overflow-wrap:normal}
-.colh i{display:block;height:6px;border-radius:0 0 3px 3px;margin:0 -4px}
-.colh span{display:block;text-align:center}
+.colh{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:6px;height:64px;min-height:0;padding:0 4px 6px;font:600 11px/1.15 var(--cond);text-transform:none;letter-spacing:0;color:var(--ink);hyphens:none;overflow-wrap:normal}
+.colh i{display:block;width:auto;height:6px;border-radius:0 0 3px 3px;margin:0 2px}
+.colh span{display:block;text-align:center;white-space:normal}
 .vc-core{--vc:var(--v-core)} .vc-supporting{--vc:var(--v-supporting)} .vc-specialist{--vc:var(--v-specialist)} .vc-light{--vc:var(--v-light)}
 .ch .colh i{background:var(--vc)}
 .valcol td.c button.h1{background:color-mix(in srgb,var(--vc) 14%,var(--panel))}
@@ -363,7 +365,7 @@ td.c button.mark.on{color:var(--take)}
 /* checkout */
 .totals{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:0 0 12px}
 .rv-h{font-size:16px;margin:16px 0 8px}
-.get.wide{margin-top:16px}
+.get.wide{margin:16px 0}
 .getgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .getgrid h4{font:600 12.5px/1.2 var(--sans);margin:0 0 6px}
 .getgrid > div{display:grid;gap:8px;align-content:start}
@@ -479,6 +481,7 @@ td.c button.sqm.all{box-shadow:inset 0 0 0 3px var(--take)}
 td.c button.sqm.all .cn{color:var(--take);font-weight:700}
 .valcol td.c button.h3.all{color:var(--ink)}
 td.c button:not(.rm) .ring{display:none}
+td.c button.rm.sqm{box-shadow:none}
 .rel-grid td.c button.all{background:var(--accent-soft)}
 /* details only on hover, in reserved space, so nothing shifts */
 .rowh .info{opacity:0;transition:opacity .12s}
@@ -554,6 +557,8 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
 .dlist li{display:flex;gap:8px;justify-content:space-between}
 .dtab{border-collapse:collapse;width:100%;font-size:12.5px}
 .fresh{max-height:420px;overflow:auto}
+.dash-sort{margin-bottom:8px}
+.dash-sort select{margin-left:4px}
 .fresh thead th{position:sticky;top:0;background:var(--panel,var(--bg))}
 .dtab th,.dtab td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--soft)}
 .dtab th{font:500 10.5px/1 var(--mono);text-transform:uppercase;color:var(--muted)}
@@ -770,9 +775,9 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       checkout: { group: 'row', show: 'kept' } },
     sel: new Set()
   };
-  const SETTINGS_DEFAULT = { cellDetail: false, mark: 'square', fileClick: ['details'], totals: false, hideEmpty: true, valueFilter: false, compact: true, toFiles: true, valueColour: true, shadeCells: true,
-    detailAt: 'right', dw: 620, dh: 360, theme: 'system', lw: 280, rw: 340, mc: 280, shut: ['since'],
-    rails: [true, true], fold: { takes: true, snaps: true, rules: false, files: false }, pfGroup: 'entry', introDismissed: false }; // Filters and Profile panels, open or shut on every page alike
+  const SETTINGS_DEFAULT = { cellDetail: false, mark: 'square', fileClick: ['details'], totals: false, hideEmpty: true, compact: true, toFiles: true, valueColour: true, shadeCells: true,
+    detailAt: 'right', dw: 620, dh: 360, theme: 'system', lw: 280, rw: 340, mc: 280, shut: ['show', 'releases', 'types', 'values', 'headings', 'entries', 'runsOn', 'formats', 'since'],
+    rails: [false, true], fold: { takes: false, snaps: false, rules: false, files: false }, pfGroup: 'entry', introDismissed: false, minColumnWidth: 85 }; // Filters and Profile panels, open or shut on every page alike
   let SET = clone(SETTINGS_DEFAULT);
   try { const s = JSON.parse(localStorage.getItem('docs-explorer-settings-v7') || 'null'); if (s) SET = Object.assign(SET, s, { rails: Array.isArray(s.rails) ? s.rails : clone(SETTINGS_DEFAULT.rails), fold: Object.assign(clone(SETTINGS_DEFAULT.fold), s.fold || {}) }); } catch (e) { /* storage unavailable */ }
   if (SET.theme === 'cool') SET.theme = 'attractor';
@@ -903,7 +908,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     if (f.show === 'in' && !S.taken.has(d.id)) return false;
     if (f.show === 'out' && S.taken.has(d.id)) return false;
     if (skip !== 'types' && f.types.length && !f.types.includes(d.type)) return false;
-    if (skip !== 'values' && SET.valueFilter && f.values.length && !f.values.includes(d.value)) return false;
+    if (skip !== 'values' && f.values.length && !f.values.includes(d.value)) return false;
     if (skip !== 'headings' && f.headings.length && !d.er.some((x) => f.headings.includes(x.h))) return false;
     if (skip !== 'entries' && f.entries.length && !inEntries(d, f.entries)) return false;
     if (skip !== 'formats' && f.formats.length && !f.formats.includes(d.format)) return false;
@@ -919,7 +924,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     else if (f.headings.length) out.entries = ROWS.filter((r) => f.headings.includes(r.h)).map((r) => r.n);
     else if (f.sites.length === 1) out.entries = ROWS.filter((r) => r.site === f.sites[0]).map((r) => r.n);
     if (f.types.length) out.types = f.types.slice();
-    else if (SET.valueFilter && f.values.length) out.types = TYPES.filter((t) => f.values.includes(VALUE[t]));
+    else if (f.values.length) out.types = TYPES.filter((t) => f.values.includes(VALUE[t]));
     if (f.formats.length) out.format = f.formats.slice();
     const rel = curReleases(); if (rel) out.releases = rel;
     return out;
@@ -1016,7 +1021,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     h += facet('sites', 'Sites', [], {}, ['docs', 'main'].map((s) => '<label class="opt"><input type="checkbox" data-site="' + s + '"' + (f.sites.includes(s) ? ' checked' : '') + '><span class="lb"><span>' + HOST[s] + '</span></span><span></span><span class="n">' + fmt(sc[s]) + '</span></label>').join(''), f.sites.length < 2 ? (f.sites.length ? SITE[f.sites[0]] + ' only' : 'none') : '');
     h += facet('releases', 'Releases', [], {}, releasesFacet(), relDefault(f.rel) ? '' : describeRules(f.rel));
     h += facet('types', 'Type', TYPES.map((t) => [t, lb(VALUE[t], t)]), counts('types', (d) => d.type));
-    if (SET.valueFilter) h += facet('values', 'Value', VALUES.map((v) => [v, lb(v, v)]), counts('values', (d) => d.value));
+    h += facet('values', 'Value', VALUES.map((v) => [v, lb(v, v)]), counts('values', (d) => d.value));
     h += facet('headings', 'Docs-Site Heading', HEADINGS.map((x) => [x]), counts('headings', (d) => d.er[0].h));
     const ec = {}; DOCS.forEach((d) => { if (pass(d, 'entries')) d.er.forEach((x) => { ec[x.n] = (ec[x.n] || 0) + 1; }); });
     const ents = ROWS.filter((r) => (!entryQ || r.n.toLowerCase().includes(entryQ)) && (ec[r.n] || f.entries.includes(r.n))).sort((a, b) => (ec[b.n] || 0) - (ec[a.n] || 0));
@@ -1100,7 +1105,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     const bridge = asFilter(), empty = !Object.keys(bridge).length;
     $('chips').innerHTML = chips.map((c, i) => '<span class="c">' + esc(c[0]) + '<button type="button" data-chip="' + i + '" aria-label="Remove">×</button></span>').join('') +
       '<button class="btn ghost small" type="button" id="c-clear">Clear All</button>' +
-      '<button class="btn small" type="button" id="c-add"' + (empty ? ' disabled' : ' title="Adds a rule: ' + esc(describe(bridge).join(' · ')) + '. Future matching files join automatically.' + (f.q ? ' (the search text is not saved)' : '') + (f.runsOn.length || f.forRel ? ' (Compatibility narrows what you see; it is not saved)' : '') + '"') + '>Add Current Filter to Profile</button>' +
+      '<button class="btn small" type="button" id="c-add"' + (empty ? ' disabled' : ' title="Adds a rule: ' + esc(describe(bridge).join(' · ')) + '. Future matching files join automatically.' + (f.q ? ' (the search text is not saved)' : '') + (f.runsOn.length || f.forRel ? ' (Compatibility narrows what you see; it is not saved)' : '') + '"') + '>Add All in Filter to Profile</button>' +
       '<button class="btn ghost small" type="button" id="c-link">Link to This View</button>';
     $('chips').onclick = (e) => {
       const b = e.target.closest('button'); if (!b) return;
@@ -1120,7 +1125,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     const opts = (S.modified ? '<option value="mod">' + esc(S.pname) + ' · modified</option>' : '') + '<option value="new">New Profile</option><optgroup label="Starter Profiles">' + STARTERS.map((n) => '<option value="s:' + n + '">' + n + '</option>').join('') + '</optgroup>' +
       (S.loaded && /^[fl]:/.test(S.loaded) ? '<option value="' + esc(S.loaded) + '">' + esc(S.pname) + '</option>' : '') + '<option value="open">Open a File…</option>';
     const bad = unknownEntries(S.profile);
-    let h = '<div class="pp-head"><select id="p-select" aria-label="Profile">' + opts + '</select>' +
+    let h = '<div class="pp-head"><select id="p-select" aria-label="Profile" class="' + (S.loaded || S.modified ? '' : 'cue') + '">' + opts + '</select>' +
       '<div class="pp-row"><span class="big">' + fmt(onDocs.length) + '</span><span class="muted">files' + (snaps.length ? ' + ' + snaps.length + ' snapshot' + (snaps.length > 1 ? 's' : '') : '') + (S.modified ? ' · <span style="color:var(--warn)">modified</span>' : '') + '</span><span class="grow"></span>' +
       '<button class="btn ghost small" type="button" id="p-save">Save</button><button class="btn ghost small" type="button" id="p-link">Copy Link</button></div>' +
       (S.profile.about ? '<p class="note">' + esc(S.profile.about) + '</p>' : '') +
@@ -1247,7 +1252,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       return '<tr class="ent' + (l2 ? ' l2' : '') + (openE ? ' open' : '') + '"><th class="rowh"><div class="in"><button class="nmb" type="button" ' + (SET.toFiles ? 'data-ent="' + r.i + '"' : 'data-detail="' + r.i + '"') + ' title="' + esc(r.n) + '">' + (SET.toFiles ? '<span class="caret"></span>' : '') + '<span class="nm">' + esc(r.n) + '</span></button>' +
         '<button class="info" type="button" data-detail="' + r.i + '" title="Details">ⓘ</button><button class="add" type="button" data-row="' + r.i + '" title="Add or take out the whole row">+</button></div></th>' + cellsFor([r], 'r|' + r.i, r.n) + '</tr>' + (openE ? fileRows(r, l2 ? 'l3' : 'l2') : '');
     };
-    const minW = SET.mc + cols.length * 50 + (SET.totals ? 70 : 0);
+    const minW = SET.mc + cols.length * SET.minColumnWidth + (SET.totals ? 70 : 0);
     let h = '<div class="mx' + (SET.valueColour ? ' valcol' : '') + (SET.shadeCells ? ' shade' : '') + '"><table style="min-width:' + minW + 'px"><colgroup><col class="rc">' + cols.map(() => '<col>').join('') + (SET.totals ? '<col style="width:70px">' : '') + '</colgroup><thead><tr><th class="corner">' + (V.group === 'path' ? 'Where It Lives' : 'Entry') + '<span class="cgrip" id="cgrip" title="Drag to resize"></span></th>' +
       cols.map((t) => '<th class="ch' + vc(t) + '"><button class="colh" type="button" data-col="' + esc(t) + '" title="' + esc(t) + ': add or take out for every row shown"><i></i><span>' + (SHORT[t] || esc(t)) + '</span></button></th>').join('') +
       (SET.totals ? '<th class="tot">Total</th>' : '') + '</tr></thead><tbody>';
@@ -1261,7 +1266,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     if (!groups.length) h = '<p class="muted">Nothing matches. Clear a filter above.</p>';
     const box = $('results'), mx = box.querySelector('.mx'), top = mx ? mx.scrollTop : 0, left = mx ? mx.scrollLeft : 0;
     box.innerHTML = h;
-    const mx2 = box.querySelector('.mx'); if (mx2) { mx2.scrollTop = top; mx2.scrollLeft = left; mx2.style.maxHeight = (box.clientHeight - 4) + 'px'; }
+    const mx2 = box.querySelector('.mx'); if (mx2) { mx2.scrollTop = top; mx2.scrollLeft = left; const padB = parseFloat(getComputedStyle(box).paddingBottom) || 0; mx2.style.maxHeight = (box.clientHeight - padB - 4) + 'px'; }
     let mc0 = 0; const cg = $('cgrip');
     if (cg) { cg.addEventListener('pointerdown', () => { mc0 = SET.mc; }, true); grip(cg, (dx) => { SET.mc = Math.max(160, Math.min(600, mc0 + dx)); document.documentElement.style.setProperty('--mc', SET.mc + 'px'); }, () => render()); }
     box.onclick = (e) => {
@@ -1426,8 +1431,10 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     const chk = (k, l) => '<label><input type="checkbox" data-getopt="' + k + '"' + (GET[k] ? ' checked' : '') + '>' + l + '</label>';
     const rad = (v, l) => '<label><input type="radio" name="gfmt" data-getopt="fmt" value="' + v + '"' + (GET.fmt === v ? ' checked' : '') + '>' + l + '</label>';
     let h = '';
-    if (!kept.length && !snaps.length) h += '<p class="muted">The profile is empty. Pick a starter profile in the profile panel, or add from Matrix, Search or Browse.</p>';
-    else h += '<section class="get wide"><div class="gethead"><h3>Get These Files</h3>' +
+    const totalsHtml = '<div class="totals">' + [[fmt(kept.length), 'files'], [fmt(hub.length), 'main-site files: download here'], [fmt(direct), 'docs-site files: open each, or the scanner'], [fmt(guides.length), 'HTML guides: the scanner finds the PDF'], [fmt(snaps.length), 'snapshots: download here']]
+      .map(([v, l]) => '<div class="fact"><span class="v">' + v + '</span><small>' + l + '</small></div>').join('') + '</div>';
+    if (!kept.length && !snaps.length) h += '<p class="muted">The profile is empty. Pick a starter profile in the profile panel, or add from Matrix, Search or Browse.</p>' + totalsHtml;
+    else h += totalsHtml + '<section class="get wide"><div class="gethead"><h3>Get These Files</h3>' +
       '<div class="radios row">' + chk('docs', 'Documents <span class="mono muted">' + fmt(kept.length) + '</span>') + chk('snaps', 'Snapshots <span class="mono muted">' + snaps.length + '</span>') +
       '<span class="sep"></span><span class="muted">Snapshot format</span>' + rad('csv', 'CSV') + rad('md', 'Markdown') + rad('both', 'Both') + '</div>' +
       '<p class="note">Most of these files live on a server that blocks direct downloads from a web page — a browser security rule, not a bug here — so getting everything in one go needs a small script run on your own computer instead. That script (below) only fetches the files listed on this page; it does not re-scan Extreme\'s sites. <a href="' + REPO + '#how-it-works" target="_blank" rel="noopener">How this all works ↗</a></p></div>' +
@@ -1442,8 +1449,6 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       '<div class="way"><h4>3. The Link List</h4><p class="note">All ' + fmt(kept.length) + ' links, as a plain list for any download tool, or a spreadsheet with title, entry, type and release.</p>' +
       '<button class="btn ghost" type="button" data-get="list">Download the Link List</button> <button class="btn ghost" type="button" data-get="list-csv">Download as a Spreadsheet</button></div>' +
       '</div></section>';
-    h += '<div class="totals">' + [[fmt(kept.length), 'files'], [fmt(hub.length), 'main-site files: download here'], [fmt(direct), 'docs-site files: open each, or the scanner'], [fmt(guides.length), 'HTML guides: the scanner finds the PDF'], [fmt(snaps.length), 'snapshots: download here']]
-      .map(([v, l]) => '<div class="fact"><span class="v">' + v + '</span><small>' + l + '</small></div>').join('') + '</div>';
     const { html, groups } = docTable(V, kept, { review: true });
     if (kept.length) h += html;
     if (snaps.length) h += '<h3 class="rv-h">Snapshots</h3><div class="st"><table><thead><tr><th>Snapshot</th><th>Site</th><th>Tables</th><th></th></tr></thead><tbody>' +
@@ -1536,22 +1541,25 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       const years = {}; DOCS.forEach((d) => { if (d.m) years[d.m.slice(0, 4)] = (years[d.m.slice(0, 4)] || 0) + 1; });
       const ys = Object.keys(years).sort().slice(-16), ymax = Math.max(1, ...ys.map((y) => years[y]));
       const byHead = HEADINGS.map((hd) => [hd, DOCS.filter((d) => d.er[0].h === hd).length]).sort((x, y) => y[1] - x[1]);
-      const top = ROWS.filter((r) => r.site === 'docs').sort((x, y) => y.edocs.length - x.edocs.length).slice(0, 10);
-      const recent = ROWS.filter((r) => r.site === 'docs').map((r) => [r, r.docs.filter((d) => d.m === newestOf(r))[0]]).filter(([r, d]) => d).sort((x, y) => y[1].m.localeCompare(x[1].m)).slice(0, 10);
-      // freshness: every entry with numbered releases and one published in the last 12 months, by its newest release
+      // activity: every doc-site entry with at least one document, its document count, newest numbered release and when it was last published
       const scanM = mN((C.scanned || '').slice(0, 7));
-      const fresh = ROWS.filter((r) => r.site === 'docs').map((r) => {
+      const activity = ROWS.filter((r) => r.site === 'docs' && r.edocs.length).map((r) => {
         const nums = r.rel.filter((x) => vkey(x) && x.includes('.'));
-        if (nums.length < 3) return null;
-        const first = {}; r.docs.forEach((d) => { if (d.m && nums.includes(d.rel) && (!first[d.rel] || d.m < first[d.rel])) first[d.rel] = d.m; });
-        const top = nums.slice().sort((x, y) => vcmp(vkey(y), vkey(x)))[0], m = r.docs.filter((d) => d.rel === top && d.m).map((d) => d.m).sort().pop() || '';
-        const year = Object.values(first).filter((x) => scanM - mN(x) < 12).length;
-        return m && year ? { r, top, m, age: Math.max(0, scanM - mN(m)), year } : null;
-      }).filter(Boolean).sort((x, y) => x.age - y.age || x.r.n.localeCompare(y.r.n));
-      const ageCls = (a) => (a < 3 ? 'v-core' : a < 6 ? 'v-supporting' : 'v-light');
-      const freshCard = '<p class="note">Entries with numbered releases and a release published in the last 12 months, by their newest release (' + fresh.length + '). Newest means most recently numbered, not recommended.</p>' +
-        '<div class="fresh"><table class="dtab"><thead><tr><th>Entry</th><th>Heading</th><th>Newest Release</th><th>Published</th><th>Age</th><th>Releases in 12 Months</th></tr></thead><tbody>' +
-        fresh.map((x) => '<tr><td><button class="lnk" type="button" data-detail="' + x.r.i + '">' + esc(x.r.n) + '</button></td><td class="muted">' + esc(x.r.h) + '</td><td class="mono">' + esc(x.top) + '</td><td class="mono">' + esc(x.m) + '</td><td class="mono"><i class="sq ' + ageCls(x.age) + '"></i> ' + (x.age ? x.age + ' mo' : 'this month') + '</td><td class="mono">' + x.year + '</td></tr>').join('') + '</tbody></table></div>';
+        const top = nums.length ? nums.slice().sort((x, y) => vcmp(vkey(y), vkey(x)))[0] : '';
+        const m = newestOf(r);
+        return { r, docs: r.edocs.length, top, m, age: m ? Math.max(0, scanM - mN(m)) : null };
+      });
+      V.dashSort = V.dashSort || 'fresh';
+      const sorted = activity.slice().sort((x, y) => {
+        if (V.dashSort === 'docs') return y.docs - x.docs || x.r.n.localeCompare(y.r.n);
+        if (x.age === null && y.age === null) return x.r.n.localeCompare(y.r.n);
+        if (x.age === null) return 1; if (y.age === null) return -1;
+        return x.age - y.age || x.r.n.localeCompare(y.r.n);
+      });
+      const ageCls = (a) => (a === null ? '' : a < 3 ? 'v-core' : a < 6 ? 'v-supporting' : 'v-light');
+      const activityCard = '<div class="dash-sort"><label class="note">Sort by <select id="d-sort"><option value="fresh"' + (V.dashSort === 'fresh' ? ' selected' : '') + '>Newest Published</option><option value="docs"' + (V.dashSort === 'docs' ? ' selected' : '') + '>Most Documents</option></select></label></div>' +
+        '<div class="fresh"><table class="dtab"><thead><tr><th>Entry</th><th>Heading</th><th>Documents</th><th>Newest Release</th><th>Published</th><th>Age</th></tr></thead><tbody>' +
+        sorted.map((x) => '<tr><td><button class="lnk" type="button" data-detail="' + x.r.i + '">' + esc(x.r.n) + '</button></td><td class="muted">' + esc(x.r.h) + '</td><td class="mono">' + fmt(x.docs) + '</td><td class="mono">' + (x.top ? esc(x.top) : '—') + '</td><td class="mono">' + (x.m ? esc(x.m) : '—') + '</td><td class="mono">' + (x.age === null ? '—' : '<i class="sq ' + ageCls(x.age) + '"></i> ' + (x.age ? x.age + ' mo' : 'this month')) + '</td></tr>').join('') + '</tbody></table></div>';
       const card = (title, body, wide) => '<section class="dcard' + (wide ? ' wide' : '') + '"><h3>' + title + '</h3>' + body + '</section>';
       if (!SET.introDismissed) h += '<section class="dcard wide" style="margin:4px 0 14px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3>New Here?</h3><button class="btn ghost small" type="button" data-intro="dismiss" aria-label="Dismiss">×</button></div>' +
         '<ul class="dlist" style="list-style:none;padding-left:0">' +
@@ -1564,20 +1572,19 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
         card('Documents by Type', bars(byType, '')) +
         card('Documents by Docs-Site Heading', bars(byHead, 'v-core')) +
         card('Published per Year', '<div class="years">' + ys.map((y) => '<div class="yr" title="' + y + ': ' + fmt(years[y]) + '"><b style="height:' + (years[y] / ymax * 100) + '%"></b><span>' + y.slice(2) + '</span></div>').join('') + '</div><p class="note">Years with a stated publish month; the most recent ' + ys.length + ' shown.</p>') +
-        card('Freshness', freshCard, true) +
-        card('Most Documents', '<ol class="dlist">' + top.map((r) => '<li><button class="lnk" type="button" data-detail="' + r.i + '">' + esc(r.n) + '</button><span class="mono muted">' + fmt(r.edocs.length) + '</span></li>').join('') + '</ol>') +
-        card('Recently Updated', '<ol class="dlist">' + recent.map(([r, d]) => '<li><button class="lnk" type="button" data-detail="' + r.i + '">' + esc(r.n) + '</button><span class="mono muted">' + esc(d.m) + '</span></li>').join('') + '</ol>') +
         card('Starter Profiles', '<table class="dtab"><thead><tr><th>Profile</th><th>Entries</th><th>Files</th><th></th></tr></thead><tbody>' + STARTERS.map((n) => '<tr><td>' + esc(n) + '</td><td class="mono">' + starterRows[n].size + '</td><td class="mono">' + fmt(files(takenBy(P[n]))) + '</td><td><button class="btn ghost small" type="button" data-use="' + esc(n) + '">Use</button></td></tr>').join('') + '</tbody></table>') +
         card('Snapshots and Compatibility', '<p class="note">' + fmt(SNAPS.length) + ' support pages kept whole, with ' + fmt(SNAPS.reduce((n, s) => n + s.tables, 0)) + ' tables.</p><p class="note">Compatibility: ' + PLATFORMS.length + ' hardware platforms with stated support for ' + esc(SOFTWARE.join(', ')) + ', from ' + SOURCES.length + ' support tables.</p><div class="acts2">' + PLATFORMS.map((x) => '<button class="btn ghost small" type="button" data-detail="' + BY_NAME[x].i + '">' + esc(x) + '</button>').join('') + '</div>') +
+        card('Entry Activity', activityCard, true) +
         '</div>';
       const box = $('results'), top0 = box.scrollTop; box.innerHTML = h; box.scrollTop = top0;
+      const dSort = $('d-sort'); if (dSort) dSort.onchange = function () { V.dashSort = this.value; render(); };
       box.onclick = (e) => {
         const b = e.target.closest('button'); if (!b) return;
         if (b.dataset.detail) openEntry(ROWS[+b.dataset.detail]);
         else if (b.dataset.use) loadProfile(starterProfile(b.dataset.use), b.dataset.use, 's:' + b.dataset.use);
         else if (b.dataset.intro === 'dismiss') { SET.introDismissed = true; saveSettings(); render(); }
         else if (b.dataset.intro === 'matrix') go('matrix');
-        else if (b.dataset.intro === 'search') { S.f = Object.assign(DEFAULT_F(), { q: 'release notes' }); go('search'); }
+        else if (b.dataset.intro === 'search') { S.f = Object.assign(DEFAULT_F(), { types: ['Release Notes'] }); SET.rails[0] = true; SET.shut = SET.shut.filter((k) => k !== 'releases' && k !== 'types'); saveSettings(); go('search'); }
         else if (b.dataset.intro === 'browse') go('browse');
       };
       return;
@@ -1751,7 +1758,19 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   $('b-legend').onclick = (e) => openPop(e.currentTarget, (pop) => {
     pop.innerHTML = '<h4>Value of a Document Type</h4>' + VALUES.map((v) => '<div class="row"><i class="sq v-' + v + '" style="width:22px;height:8px"></i><b>' + v + '</b><span class="muted">' + VALUE_MEANS[v] + '</span></div>').join('') +
       '<p class="note">A column\'s colour is its type\'s value. Our judgement, set in <span class="mono">config/types.yaml</span>.</p>' +
-      '<h4>Counts</h4><div class="row"><i class="sw h2"></i>documents there; darker means more</div><div class="row"><i class="sw all"></i>the profile takes them all</div><div class="row"><i class="sw part"></i>the profile takes some</div>' +
+      '<h4>Counts</h4><div class="row"><i class="sw h2"></i>documents there; darker means more</div>' +
+      '<h4>How a Count Shows What\'s Taken</h4><p class="note" style="margin-bottom:8px">The border (or ring) fills by the share of that cell\'s documents taken, not the raw number — solid only once every one is taken. Style is set in Settings.</p>' +
+      '<div class="mx valcol" style="display:inline-block;border:0;overflow:visible;background:transparent"><table style="border-collapse:collapse;margin-bottom:8px"><tr>' +
+      '<td class="c vc-core" style="width:46px;padding:2px"><button type="button" class="h2 sqm part" style="--p:45" tabindex="-1"><span class="cn">12</span></button></td>' +
+      '<td class="c vc-core" style="width:46px;padding:2px"><button type="button" class="h2 sqm all" tabindex="-1"><span class="cn">12</span></button></td>' +
+      '<td class="c vc-core" style="width:46px;padding:2px"><button type="button" class="h2 sqm part rm" tabindex="-1"><span class="ring" style="--p:45"></span><span class="cn">12</span></button></td>' +
+      '<td class="c vc-core" style="width:46px;padding:2px"><button type="button" class="h2 sqm all rm" tabindex="-1"><span class="ring" style="--p:100"></span><span class="cn">12</span></button></td>' +
+      '</tr><tr>' +
+      '<td class="muted" style="font-size:10.5px;text-align:center;padding-top:2px">Frame<br>some</td>' +
+      '<td class="muted" style="font-size:10.5px;text-align:center;padding-top:2px">Frame<br>all</td>' +
+      '<td class="muted" style="font-size:10.5px;text-align:center;padding-top:2px">Ring<br>some</td>' +
+      '<td class="muted" style="font-size:10.5px;text-align:center;padding-top:2px">Ring<br>all</td>' +
+      '</tr></table></div>' +
       '<h4>Marks</h4><div class="row"><b style="color:var(--take);width:22px;text-align:center">✓</b>in the profile</div><div class="row"><b style="width:22px;text-align:center">○</b>not in the profile</div><div class="row"><span class="chip">latest</span>in the entry\'s newest release</div>';
   });
   $('b-settings').onclick = (e) => openPop(e.currentTarget, (pop) => {
@@ -1759,17 +1778,19 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     const r = (name, k, opts) => '<div class="radios">' + opts.map(([v, l]) => '<label><input type="radio" name="' + name + '" data-setr="' + k + '" value="' + v + '"' + (SET[k] === v ? ' checked' : '') + '>' + l + '</label>').join('') + '</div>';
     pop.innerHTML = '<h4>Theme</h4>' + r('theme', 'theme', [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']].concat(SET.theme === 'attractor' ? [['attractor', 'Strange Attractor']] : [])) +
       '<h4>Matrix</h4>' + t('toFiles', 'Rows open down to single files') + t('valueColour', 'Colour counts by their column\'s value') + t('shadeCells', 'Group shading reaches across the counts') + t('totals', 'Show totals') + t('hideEmpty', 'Hide empty columns') +
+      '<label class="opt" style="grid-template-columns:auto minmax(0,1fr)"><span>Min column width (px):</span><input type="number" id="minColumnWidth" min="50" max="150" value="' + SET.minColumnWidth + '" style="width:60px;padding:4px 6px"></label>' +
       '<h4>Marking What the Profile Takes</h4>' + r('mark', 'mark', [['square', 'A frame around the count, stronger as it fills'], ['ring', 'A ring around the count']]) +
       '<h4>Clicking</h4>' + t('cellDetail', 'A count opens its details (instead of adding it)') +
       '<p class="note">Clicking a single file\'s title (the Matrix\'s last level, and Search):</p>' + [['details', 'opens its details'], ['open', 'opens the file'], ['toggle', 'adds it or takes it out'], ['copy', 'copies its link']].map(([v, l]) => '<label class="opt" style="grid-template-columns:auto minmax(0,1fr)"><input type="checkbox" data-fc="' + v + '"' + (SET.fileClick.includes(v) ? ' checked' : '') + '><span>' + l + '</span></label>').join('') +
       '<h4>Details</h4>' + r('dat', 'detailAt', [['right', 'Open at the right'], ['bottom', 'Open at the bottom']]) +
       '<h4>Tables</h4>' + t('compact', 'One line per row (long titles cut short)') +
-      '<h4>Filters</h4>' + t('valueFilter', 'Value can also filter (not only colour and order)') + '<button class="btn ghost small" type="button" id="set-reset">Reset Settings</button><p class="note">Remembered in this browser.</p>';
+      '<button class="btn ghost small" type="button" id="set-reset">Reset Settings</button><p class="note">Remembered in this browser.</p>';
     pop.onchange = (ev) => {
       const x = ev.target;
+      if (x.id === 'minColumnWidth') { SET.minColumnWidth = parseInt(x.value) || 85; applyMatrixLayout(); saveSettings(); render(); return; }
       if (x.dataset.fc) SET.fileClick = x.checked ? [...new Set(SET.fileClick.concat([x.dataset.fc]))] : SET.fileClick.filter((v) => v !== x.dataset.fc);
       else if (x.dataset.setr) { SET[x.dataset.setr] = x.value; if (x.dataset.setr === 'theme') applyTheme(); }
-      else { SET[x.dataset.set] = x.checked; if (!SET.valueFilter) S.f.values = []; }
+      else { SET[x.dataset.set] = x.checked; }
       saveSettings(); render();
     };
     pop.onclick = (ev) => { if (ev.target.id === 'set-reset') { SET = clone(SETTINGS_DEFAULT); saveSettings(); applyTheme(); closePop(); render(); } };
@@ -1859,6 +1880,12 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     fxPanel();
   }
 
+  function applyMatrixLayout() {
+    let style = document.getElementById('matrix-layout-style');
+    if (!style) { style = document.createElement('style'); style.id = 'matrix-layout-style'; document.head.appendChild(style); }
+    style.textContent = '.mx { table-layout: fixed; } .mx table { table-layout: fixed; } .rel-grid .colh { min-width: ' + SET.minColumnWidth + 'px; }';
+  }
+
   // ---------- routing and render ----------
   const PAGES = ['dashboard', 'matrix', 'search', 'browse', 'checkout'];
   function go(page) { S.page = page; history.replaceState(null, '', '#/' + page); render(); }
@@ -1882,6 +1909,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   window.addEventListener('resize', () => { if (S.page === 'matrix') renderMatrix(); });
   document.querySelectorAll('.tabs a').forEach((a) => { a.onclick = (e) => { e.preventDefault(); go(a.dataset.page); }; });
   applyTheme();
+  applyMatrixLayout();
   readHash();
   render();
   window.EXPLORER = { S, P, DOCS, ROWS, SNAPS, takenBy, unknownEntries, toYaml, toRules, fromRules, relSet }; // for checking only
