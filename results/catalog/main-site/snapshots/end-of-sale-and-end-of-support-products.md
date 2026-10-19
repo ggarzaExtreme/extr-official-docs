@@ -307,7 +307,7 @@ Extreme Networks products that have reached their End of Service Life (EOSL) dat
 | 5/6/2024 | Smart OmniEdge Switching | 10966 | Immediate End of Sale Announcement for 10966 |
 | 1/19/2024 | ExtremeSwitching | Power Cords | EOS Notification for Extreme Miscellaneous Power Cords |
 | 6/3/2024 | ExtremeWireless | ExtremeWireless WiNG 7 Software | End-of-Version-Maintenance Announcement for ExtremeWireless WiNG 7 Software |
-| 6/3/2024 | ExtremeWireless | WiNG VX9000 CX9000 | EOS Notification for VX9000 and CX9000 (CX-WiNG) |
+| 9/24/2026 | WiNG Wireless | VX9000 and CX9000 (CX-WiNG) | Update to End-of-Sale Notification Announcement for VX9000 and CX9000 (CX-WiNG) |
 | 5/28/2024 | Miscellaneous Cables and Accessories | Immediate End-of-Sale Announcement for Accessories and Cables | Immediate End-of-Sale Announcement for Accessories and Cables |
 | 5/29/2024 | Smart OmniEdge Wireless | 30137 | End-of-Sale Notification for ExtremeCloud IQ Controller Hardware Appliance E1120 [30137] |
 | 6/21/2024 | SRA | Extreme Visibility Manager (XVM) 6.x, XVM-LIC-1 | End of Sale Notification for Extreme Visibility Manager (XVM) 6.x |
@@ -364,6 +364,7 @@ Extreme Networks products that have reached their End of Service Life (EOSL) dat
 | 6/9/2026 | AH | AP460C, AP460S6C and AP460S12C | End-of-Sale Announcement for Wireless Access Point AP460C, AP460S6C and AP460S12C |
 | 7/14/2026 | Summit & EAN | 16535A & AL3600A16-E6 | Update to End-of-Sale Notification for 16535A (X440-G2-48p-10GE4) and AL3600A16-E6 (ERS3650GTS-PWR+) Switches |
 | 8/4/2026 | AP4000 Series | AP4000 | Update to End-of-Sale Notification for Wireless Access Point AP4000-WW |
+| 9/25/2026 | XIQ | ExtremeCloud IQ Multi-Year Pilot and TAC & OS | End of Sale Announcement for ExtremeCloud IQ Multi-Year Pilot and TAC & OS Subscriptions (aka XCIQ) for the US K-12 Market |
 
 ### Legacy WLAN EOS
 
