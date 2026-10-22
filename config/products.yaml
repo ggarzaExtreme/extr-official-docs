@@ -1,0 +1,156 @@
+# Products: the explorer's Group By › Product. Every docs-site entry sits in one family of one kind
+# (Hardware, Software or Solutions), which the docs site's own headings don't give. Kept by hand.
+#
+# A family lists regular expressions, each matched against the whole entry name, ignoring case. The
+# first family that matches wins, in the order written here, so the "(Hardware)" twins come before the
+# software families that take the plain names (the docs site lists "ERS 3600 Series" for the software
+# and "ERS 3600 Series (Hardware)" for the switches).
+#
+# Each scan lists under To Check any docs-site entry no family matches. Main-site groups (policies,
+# stencils) aren't products: the explorer shows them on their own.
+
+Hardware:
+  Universal Switches:
+    - '(4120|4220|5120|5320|5420|5520|5720|7830|8520) Series'
+    - '8720|8730|8820'
+    - 'Extreme (7520|7720)'
+  ExtremeSwitching X and Summit:
+    - 'X\d{3}(-G2)?'
+    - 'Summit Family Switches'
+    - 'V[34]00 Virtual Port Extender'      # port extenders for Switch Engine (ExtremeXOS) control bridges
+  VSP and XA:
+    - 'VSP \d{4} Series \(Hardware\)'
+    - 'XA1400 Series \(Hardware\)'
+  ERS:
+    - 'ERS .* \(Hardware\)'
+  SLX, VDX and NetIron:
+    - 'SLX\d{4}'
+    - 'SLX Series'
+    - 'VDX\d{4}'
+    - 'NetIron \(CES, CER & MLX Series\)'
+  K and S Series (Chassis):
+    - 'K-Series'
+    - 'S-Series.*'
+  Industrial Switches:
+    - 'ISW Series Industrial Switches \(Hardware\)'
+    - 'Industrial Switches'
+  Routers:
+    - 'E4G Series Routers'
+    - 'XR\d{3}P?'
+    - 'SR\d{4}.*'
+  Other Switching:
+    - '200 Series'
+    - 'Other Routing & Switching Hardware'
+  Optics and Adapters:
+    - 'Pluggable Hardware \(Optics\)'
+    - 'LRM/MACsec Adapter'
+    - 'Other Hardware Documentation'
+  Packet Brokers:
+    - '9920 Network Packet Broker'
+  Access Points (AP3000 to AP5060):
+    - 'AP3000X?'
+    - 'AP3020W'
+    - 'AP[45]0\d\d.*'
+  Access Points (AP30 to AP1130):
+    - 'AP\d{2,3}[A-Z]*([ ,/].*)?'
+    - 'AP1130'
+  Access Points (ExtremeWireless):
+    - 'AP3[89]\d\d.*'
+  Access Points (WiNG):
+    - 'AP[789]\d{3}.*'
+  Wireless Controllers and Appliances:
+    - 'C35|C5215'
+    - 'E[123]1\d\d'
+    - 'NX\d{4}( Series)?'
+    - 'RFS.*'
+    - 'V2110|VE6120 and VE6125|VX9000'
+    - 'SA201'
+  Wireless Accessories and Antennas:
+    - '802\.11ax and Cloud Access Points Accessories'
+    - 'AP Brackets Used with Indoor Access Points'
+    - 'Antennas Specification Guides'
+    - 'EIO-04 Access Point Accessory'
+    - 'TS-524 & TW-5XX'
+  Universal Compute:
+    - 'Universal Compute Platform'
+    - 'ExtremeCloud Edge'
+    - 'Extreme Tunnel Concentrator'
+
+Software:
+  Switch and Router OS:
+    - 'Switch Engine'
+    - 'ExtremeXOS'
+    - 'Fabric Engine'
+    - 'VSP Operating System Software \(VOSS\)'
+    - 'VOSS White Box Edition'
+    - 'VSP (8600|9000) Series'
+    - 'XA1400 Series'
+    - 'Extreme OS ONE Switching and Routing'
+    - 'EOS \(software\)'
+    - 'ISW Series Industrial Switches \(Software\)'
+    - 'D, G, I Series SW'
+    - 'Other Routing & Switching Software'
+  ERS Software:
+    - 'ERS .*Series'
+  SLX-OS, Network OS and NetIron Software:
+    - 'SLX-.*\(software\)'
+    - 'Network OS \(software\)'
+    - 'NetIron \(software\)'
+  Wireless OS:
+    - 'IQ Engine'
+    - 'ExtremeWireless Software'
+    - 'ExtremeWireless WiNG Software'
+    - 'MeshConnex'
+    - 'SmartRF'
+  Extreme Platform ONE:
+    - 'Extreme Platform ONE.*'
+  ExtremeCloud IQ:
+    - 'ExtremeCloud IQ'
+    - 'Extreme(AirDefense|Guest|IOT|Location) Essentials'
+    - 'Extreme AirDefense Essentials'
+    - 'ExtremeCloud Business Insights for Venues'
+    - 'Extreme Intuitive Insights'
+  ExtremeCloud (Legacy):
+    - 'ExtremeCloud'                       # the earlier cloud product, not ExtremeCloud IQ
+  ExtremeCloud IQ Site Engine:
+    - 'ExtremeCloud IQ Site Engine'
+    - 'Extreme Management Center'
+  ExtremeCloud IQ Controller:
+    - 'ExtremeCloud IQ Controller'
+  Orchestration and Automation:
+    - 'ExtremeCloud Orchestrator'
+    - 'Fabric Orchestrator'
+    - 'Extreme Fabric Automation'
+    - 'Configuration & Orchestration Manager'
+  Security and Identity:
+    - 'ExtremeControl'
+    - 'ExtremeCloud A3'
+    - 'Extreme Defender for IoT'
+    - 'Identity Engines'
+    - 'ExtremeGuest( Gateway)?'
+    - 'Guest & IoT Manager'
+    - 'Security Information & Event Manager \(SIEM\)'
+    - 'Security Threat Protection'
+    - 'Extreme AirDefense'
+    - 'AirDefense Personal'
+  Analytics and Visibility:
+    - 'ExtremeAnalytics.*'
+    - 'Visualization Performance & Fault Manager'
+    - 'Extreme 9920 Software'
+    - 'Extreme Virtual Packet Broker'
+    - 'Extreme Virtual TAP'
+    - 'NSight'
+  SD-WAN:
+    - '.*SD-WAN'
+  Extreme AI:
+    - 'Extreme Agent ONE'
+    - 'Extreme Exchange'
+  Virtual Appliances:
+    - 'VPN Gateway Virtual Appliance'
+    - 'Virtual Machines'
+
+Solutions:
+  Solution and Deployment Guides:
+    - 'Extreme Solution Guides \(cross-product\)'
+    - 'ERS Migration'
+    - 'AFC Deployment Guides'

@@ -1063,7 +1063,7 @@ def to_check(cat, snaps, health, meta, old_meta):
     for s in (meta.get("timing") or {}).get("steps") or []:
         if prev_rate.get(s["step"]) and s["rate"] and s["rate"] < prev_rate[s["step"]] * 0.5:
             out.append("%s ran at %.1f/s, under half the last scan's %.1f/s: the site may be throttling." % (s["step"], s["rate"], prev_rate[s["step"]]))
-    for c in compat_unmapped():
+    for c in compat_unmapped() + products_unplaced():
         out.append(c)
     return out
 
@@ -1470,6 +1470,34 @@ def compat_relations():
     return out
 
 
+# ---------- products: hardware, software and solutions families, for the explorer ----------
+
+def product_families(entries):
+    """(kinds, of, unplaced) from config/products.yaml: kinds is [[kind, [family, ...]], ...] in the
+    file's order; of maps each entry to [kind, family] (the first family whose pattern matches the whole
+    name, ignoring case); unplaced lists the entries no family matches."""
+    cfg = load_yaml(os.path.join(CONFIG, "products.yaml"), {}) or {}
+    kinds, rules = [], []
+    for kind, fams in cfg.items():
+        kinds.append([kind, list(fams or {})])
+        for fam, pats in (fams or {}).items():
+            rules.extend((kind, fam, re.compile(str(x), re.I)) for x in pats or [])
+    of, unplaced = {}, []
+    for e in sorted(set(entries)):
+        hit = next(((k, f) for k, f, rx in rules if rx.fullmatch(e)), None)
+        if hit:
+            of[e] = list(hit)
+        else:
+            unplaced.append(e)
+    return kinds, of, unplaced
+
+
+def products_unplaced():
+    pages = current(read_csv("docs-site/pages.csv"))
+    names = product_families([r["entry"] for r in pages if r["role"] == "entry" and r["entry"]])[2]
+    return ["Products: %d docs-site entries fit no family in config/products.yaml (%s)." % (len(names), ", ".join(names[:6]))] if names else []
+
+
 def compat_unmapped():
     compat_relations()
     names = compat_relations.unmapped
@@ -1501,11 +1529,13 @@ def explorer_data():
     meta = load_meta()
     c = meta.get("counts") or {}
     d, w = c.get("docs-site") or {}, c.get("main-site") or {}
+    kinds, of, _ = product_families([r["n"] for r in rows if r["site"] == "docs"])
     profiles = {n: {"about": p.get("about", ""), "filters": p.get("filters") or [], "snapshots": p.get("snapshots") or []} for n, p in starter_profiles().items()}
     return {"scanned": min((meta.get("scanned") or {"x": "?"}).values()), "every": rescan_after_days(), "types": types,
             "typeinfo": {"types": TYPES_CFG.get("types") or [], "values": TYPES_CFG.get("values") or {}},
             "rows": out_rows, "snapshots": snaps, "profiles": profiles, "repo": repo_url(),
             "compat": {"relations": compat_relations(), "software": (load_yaml(os.path.join(CONFIG, "compatibility.yaml"), {}) or {}).get("software") or {}},
+            "products": {"kinds": kinds, "of": of},
             "unmatched": [r["n"] for r in rows if r["site"] == "main" and r["path"] == "/products/" and any(x["ents"] == [] for x in r["d"])],
             "coverage": {"docs": {"available": d.get("available", d.get("pages", 0)), "read": d.get("pages", 0) - d.get("pages_failed", 0)},
                          "main": {"available": w.get("available", w.get("sitemap_pages", 0)), "scanned": w.get("pages_in_scope", 0)}},

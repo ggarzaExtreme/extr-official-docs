@@ -338,6 +338,15 @@ class Explorer(unittest.TestCase):
         self.assertTrue(data["rows"] and data["profiles"] and data["compat"]["relations"])
         self.assertEqual(set(data["types"]), {t["name"] for t in data["typeinfo"]["types"]})
         self.assertTrue(set(data["compat"]["software"]) >= {"Switch Engine", "ExtremeXOS", "Fabric Engine", "VOSS"})
+        self.assertEqual([k for k, _ in data["products"]["kinds"]], ["Hardware", "Software", "Solutions"])
+        self.assertEqual(data["products"]["of"].get("5520 Series"), ["Hardware", "Universal Switches"])
+
+    def test_product_families(self):
+        kinds, of, unplaced = o.product_families(["5520 Series", "ERS 3600 Series", "ERS 3600 Series (Hardware)", "Fabric Engine", "Something New"])
+        self.assertEqual(of["ERS 3600 Series (Hardware)"], ["Hardware", "ERS"])  # the hardware twin comes first
+        self.assertEqual(of["ERS 3600 Series"], ["Software", "ERS Software"])
+        self.assertEqual(of["Fabric Engine"], ["Software", "Switch and Router OS"])
+        self.assertEqual(unplaced, ["Something New"])
 
 
 if __name__ == "__main__":

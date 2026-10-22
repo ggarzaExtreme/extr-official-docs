@@ -19,6 +19,10 @@ Open work only, roughly in order of value. Findings go in each scan's report; ho
 - More compatibility sources in `config/compatibility.yaml`: EOS, ERS/BOSS, SLX-OS, wireless (IQ Engine and
   its APs), ExtremeCloud IQ hardware support.
 - A To Check item when an entry's index link isn't its newest release page.
+- Product families (`config/products.yaml`) to confirm: plain ERS/VSP/XA1400 names as software (ERS 4000,
+  5000 and "4900 and 5900" have no hardware twin); XR routers (SD-WAN?); one controller family for three
+  lines (split?); SA201; Tunnel Concentrator (hardware or virtual); Platform ONE Security and Intuitive
+  Insights; Management Center as its own legacy family; AP families by model range, not Wi-Fi generation.
 
 ## Explorer
 

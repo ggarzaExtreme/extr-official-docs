@@ -138,13 +138,18 @@ input[type=search],select.in{padding:6px 9px;border:1px solid var(--rule);border
 .facet.shut > .fb{display:none}
 .facet .tools{display:flex;gap:10px;font-size:11.5px}
 .facet .tools button{all:unset;cursor:pointer;color:var(--accent)}
-.opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto 40px;gap:7px;align-items:center;font-size:13px;padding:2px 0;cursor:pointer}
+.opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:7px;align-items:center;font-size:13px;padding:2px 0;cursor:pointer}
 .opt input{margin:0}
 .opt .lb{display:flex;gap:6px;align-items:center;min-width:0}
 .opt .lb span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .opt .n{font:11.5px/1 var(--mono);color:var(--muted);text-align:right}
-.opt .only{all:unset;cursor:pointer;font:500 11px/1 var(--sans);color:var(--accent);padding:2px 4px;border-radius:3px;opacity:0}
+/* "only" sits where the count is, on hover, so the name keeps the width */
+.opt .oc{position:relative;min-width:28px;text-align:right}
+.opt .only{all:unset;cursor:pointer;font:500 11px/1 var(--sans);color:var(--accent);padding:2px 4px;border-radius:3px;opacity:0;position:absolute;right:-4px;top:50%;transform:translateY(-50%)}
 .opt:hover .only,.opt .only:focus-visible{opacity:1}
+.opt:hover .oc .n,.opt .oc:focus-within .n{opacity:0}
+/* a type's checkbox carries its value colour, in place of a separate square */
+.opt input.vk{accent-color:var(--vc);outline:2px solid var(--vc);outline-offset:-2px;border-radius:2px}
 .opt .only:hover{background:var(--accent-soft)}
 .opt.zero{opacity:.45}
 .list{max-height:55vh;overflow:auto;padding-right:4px}
@@ -155,6 +160,8 @@ input[type=search],select.in{padding:6px 9px;border:1px solid var(--rule);border
 .ftools{display:flex;gap:6px;align-items:center}
 .ftools button{all:unset;cursor:pointer;font:500 11.5px/1 var(--sans);color:var(--accent);padding:3px 6px;border-radius:4px}
 .ftools button:hover{background:var(--accent-soft)}
+.ftools button,.pp-row .lk{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pi.sm{width:14px;height:14px;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 /* ---------- profile panel ---------- */
 .pp-head{display:grid;gap:8px}
@@ -400,10 +407,14 @@ dialog.dmodal .db{overflow:auto;padding:14px 18px 24px;display:grid;gap:14px;ali
 /* the Cool theme: the background shows through translucent panels */
 #fx{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none}
 :root[data-theme="attractor"] body{background:#07121a}
-:root[data-theme="attractor"] .top,:root[data-theme="attractor"] .toolbar{background:rgb(19 35 48 / .78);backdrop-filter:blur(6px)}
-:root[data-theme="attractor"] .rail{background:rgb(19 35 48 / .82);backdrop-filter:blur(8px)}
+:root[data-theme="attractor"]{--glass:.82}
+:root[data-theme="attractor"] .top,:root[data-theme="attractor"] .toolbar{background:rgb(19 35 48 / calc(var(--glass) - .04));backdrop-filter:blur(6px)}
+:root[data-theme="attractor"] .rail{background:rgb(19 35 48 / var(--glass));backdrop-filter:blur(8px)}
 :root[data-theme="attractor"] .center{background:transparent}
-:root[data-theme="attractor"] .mx,:root[data-theme="attractor"] .st,:root[data-theme="attractor"] .card,:root[data-theme="attractor"] .fact,:root[data-theme="attractor"] .pcard{background:rgb(19 35 48 / .84);backdrop-filter:blur(4px)}
+:root[data-theme="attractor"] .mx,:root[data-theme="attractor"] .st,:root[data-theme="attractor"] .card,:root[data-theme="attractor"] .fact,:root[data-theme="attractor"] .pcard,:root[data-theme="attractor"] .dcard,:root[data-theme="attractor"] .pcol{background:rgb(19 35 48 / calc(var(--glass) + .02));backdrop-filter:blur(4px)}
+/* Hide Interface: only the canvas and the knobs, unless a part is kept */
+:root.fx-hide:not([data-keep-top]) .top,:root.fx-hide:not([data-keep-toolbar]) .toolbar,:root.fx-hide:not([data-keep-filters]) .rail.left,
+:root.fx-hide:not([data-keep-profile]) .rail.right,:root.fx-hide:not([data-keep-page]) .center,:root.fx-hide:not([data-keep-page]) .drawer{visibility:hidden}
 
 /* rows never shrink below their content; the panel scrolls instead */
 .rail-in{grid-auto-rows:max-content}
@@ -414,11 +425,20 @@ dialog.dmodal .db{overflow:auto;padding:14px 18px 24px;display:grid;gap:14px;ali
 .egg{all:unset;cursor:default;color:inherit;padding:0 1px}
 .egg:hover{color:var(--accent);cursor:pointer}
 /* the attractor's knobs */
-.fxp{position:fixed;left:14px;bottom:14px;z-index:45;width:290px;background:rgb(19 35 48 / .9);backdrop-filter:blur(8px);border:1px solid var(--rule);border-radius:10px;padding:10px 12px;display:grid;gap:8px;font-size:12.5px;box-shadow:var(--shadow)}
+.fxp{position:fixed;left:14px;bottom:14px;z-index:45;width:300px;max-height:calc(100vh - 28px);overflow:auto;background:rgb(19 35 48 / .9);backdrop-filter:blur(8px);border:1px solid var(--rule);border-radius:10px;padding:10px 12px;display:grid;gap:8px;font-size:12.5px;box-shadow:var(--shadow)}
 .fxp .fxh{display:flex;align-items:center;gap:8px}
 .fxp .fxb{display:grid;gap:8px}
+.fxp h4{font:600 10.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-top:4px}
 .fxp label{display:grid;gap:3px;color:var(--muted)}
-.fxp input[type=range]{width:100%;accent-color:var(--accent)}
+.fxp input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+.fxp .fxr{display:flex;gap:6px;align-items:center}
+.fxp .fxl{all:unset;cursor:pointer;width:24px;height:20px;border-radius:4px;display:grid;place-items:center;color:var(--muted);font-size:14px;flex:none;border:1px solid var(--rule)}
+.fxp .fxl[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.fxp .fxlfo{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:2px 30px 0 10px;font-size:11.5px}
+.fxp .fxrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fxp .fxrow select{flex:1;min-width:0}
+.fxp .fxc{display:flex;gap:6px;align-items:center;color:var(--ink)}
+.fxp .fxkeep{display:flex;flex-wrap:wrap;gap:4px 12px}
 /* matrix counts: a ring fills as the profile takes more; full turns the number green */
 td.c button{position:relative}
 td.c button .cn{position:relative;z-index:1}
@@ -486,21 +506,32 @@ tr:hover .rowh .info,.rowh .info:focus-visible{opacity:1}
 /* the dot in the scan status */
 .status .egg{all:unset;cursor:default;padding:0 2px}
 .status .egg:hover{color:var(--accent);cursor:pointer}
-/* profile panel: what it takes, at a glance */
-.glance{display:grid;gap:6px}
-.gl{border:1px solid var(--rule);border-radius:6px;padding:6px 8px;display:grid;gap:4px;min-width:0}
-.glh{display:flex;gap:8px;align-items:baseline;min-width:0}
-.glh b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
-.glh .mono{color:var(--muted);font-size:12px}
+/* profile panel: an entry's types, as chips */
 .glt{display:flex;flex-wrap:wrap;gap:4px}
-details.fold summary{cursor:pointer;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
-details.fold[open] summary{margin-bottom:6px}
-details.fold .filter{margin-bottom:6px}
-details.fold .fold-body{max-height:min(46vh,520px);overflow:auto;padding-right:2px}
-.pf-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin-bottom:6px;position:sticky;top:0;background:var(--panel);z-index:1;padding-bottom:4px}
+/* profile panel: the cart, one line per entry, opening to its files */
+.pf-tools{display:grid;grid-template-columns:minmax(0,1fr);position:sticky;top:-12px;background:var(--panel);z-index:1;padding:4px 0}
 .pf-tools input{min-width:0}
-.fgh{font:600 12px/1.3 var(--cond);padding:8px 2px 3px;display:flex;gap:6px;align-items:center;border-bottom:1px solid var(--rule)}
-.gl .glh .lnk{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;font-size:13px;text-align:left}
+.cart{display:grid;gap:6px}
+.cl-item{border:1px solid var(--rule);border-radius:6px;padding:4px 6px 6px 2px;display:grid;gap:4px;min-width:0}
+.clh{display:flex;gap:2px;align-items:center;min-width:0}
+.clh .cv{all:unset;cursor:pointer;width:22px;height:22px;display:grid;place-items:center;border-radius:4px;flex:none}
+.clh .cv:hover{background:var(--soft)}
+.cl-item.open .caret{transform:rotate(45deg)}
+.clh .cl-t{all:unset;cursor:pointer;flex:1;min-width:0;display:flex;padding:2px 4px 2px 0;font-weight:600;font-size:13px}
+.clh .cl-t .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.clh .cl-t:hover .nm{color:var(--accent);text-decoration:underline}
+.clh .mk{color:var(--muted);font-size:14px;line-height:1;display:inline-flex;padding:0 2px;cursor:help}
+.clh .n{all:unset;cursor:pointer;font:500 12px/1 var(--mono);color:var(--muted);padding:4px}
+.clh .n:hover{color:var(--ink)}
+.clh .x{all:unset;cursor:pointer;width:22px;height:22px;border-radius:4px;display:grid;place-items:center;color:var(--muted);font-size:16px;flex:none}
+.clh .x:hover{background:var(--warn-soft);color:var(--warn)}
+.cl-item .glt{padding-left:22px}
+.cl-item .dl{border-top:1px solid var(--soft);margin-left:22px}
+.cl-item .dl .d{font-size:12.5px;grid-template-columns:14px minmax(0,1fr) auto auto;gap:6px;padding:3px 0;align-items:center}
+.cl-item .dl .tt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.cl-item .dl .add{width:22px;height:22px;font-size:14px}
+.cl-item > .btn{justify-self:start;margin-left:22px}
+.opt.withsw{grid-template-columns:auto minmax(0,1fr);font-size:12.5px;color:var(--muted)}
 .rail-in{min-width:0}
 .rail-in pre{max-width:100%}
 .radios input.rv.wide,.facet .sub input.rv.wide{width:100%;padding:5px 8px;border:1px solid var(--rule);border-radius:5px;background:var(--panel)}
@@ -586,6 +617,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   <button class="side-btn" id="r-left" type="button" aria-pressed="true" aria-controls="rail-left"><svg class="pi" viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/></svg> Filters <span class="badge" id="f-count"></span></button>
   <div class="chips" id="chips"></div>
   <span class="grow"></span>
+  <button class="btn small" id="t-add" type="button" title="Adds everything the filters show. New releases that match are added later on their own.">+ Add All Filtered</button>
   <button class="side-btn" id="r-right" type="button" aria-pressed="true" aria-controls="rail-right"><span id="p-brief"></span> <svg class="pi" viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2"/><line x1="12.5" y1="3.5" x2="12.5" y2="16.5"/></svg></button>
 </div>
 
@@ -653,6 +685,8 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   const relsFor = (p) => RELS.filter((x) => x.platform === p);
   const SOURCES = [...new Set(RELS.map((x) => x.source))];
   const where = (r) => SITE[r.site] + ' · ' + r.path;
+  const PR = C.products || { kinds: [], of: {} }, PRODUCT_OF = PR.of; // config/products.yaml: entry -> [kind, family]
+  const isHardware = (n) => (PRODUCT_OF[n] || [])[0] === 'Hardware';
   const NEWEST = DOCS.reduce((m, d) => (d.m > m ? d.m : m), '');
   const mN = (m) => (/^\d{4}-\d{2}$/.test(m || '') ? +m.slice(0, 4) * 12 + +m.slice(5, 7) : 0);
 
@@ -754,13 +788,14 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     DOCS.forEach((d) => { if (!skip.has(d.url) && fs.some((f) => matches(f, d))) out.add(d.id); });
     return out;
   }
+  const nFiles = (n) => fmt(n) + ' file' + (n === 1 ? '' : 's');
   const files = (ids) => new Set([...ids].map((i) => DOCS[i].url)).size; // a library downloads files, not listings
   const unknownEntries = (p) => [...new Set((p.filters || []).flatMap((f) => f.entries || []))].filter((n) => !BY_NAME[n]);
   const starterRows = {}; // starter profile -> rows it takes documents from (so core-reference counts too)
   STARTERS.forEach((n) => { starterRows[n] = new Set([...takenBy(P[n])].flatMap((i) => DOCS[i].er)); });
 
   // ---------- state ----------
-  const DEFAULT_F = () => ({ show: 'all', sites: ['docs', 'main'], rel: DEFAULT_REL(), types: [], values: [], headings: [], entries: [], formats: [], runsOn: [], forSw: SOFTWARE[0] || '', forRel: '', since: 0, tr: true, q: '' });
+  const DEFAULT_F = () => ({ sites: ['docs', 'main'], rel: DEFAULT_REL(), types: [], values: [], headings: [], entries: [], formats: [], runsOn: [], forSw: SOFTWARE[0] || '', forRel: '', since: 0, tr: true, q: '' });
   const S = {
     page: 'dashboard', profile: { filters: [] }, pname: 'New Profile', loaded: '', modified: false, taken: new Set(),
     f: DEFAULT_F(),
@@ -772,28 +807,52 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   };
   const SETTINGS_DEFAULT = { cellDetail: false, mark: 'square', fileClick: ['details'], totals: false, hideEmpty: true, valueFilter: false, compact: true, toFiles: true, valueColour: true, shadeCells: true,
     detailAt: 'right', dw: 620, dh: 360, theme: 'system', lw: 280, rw: 340, mc: 280, shut: ['since'],
-    rails: [true, true], fold: { takes: true, snaps: true, rules: false, files: false }, pfGroup: 'entry', introDismissed: false }; // Filters and Profile panels, open or shut on every page alike
+    rails: [true, true], withSw: false, introDismissed: false }; // Filters and Profile panels, open or shut on every page alike
   let SET = clone(SETTINGS_DEFAULT);
-  try { const s = JSON.parse(localStorage.getItem('docs-explorer-settings-v7') || 'null'); if (s) SET = Object.assign(SET, s, { rails: Array.isArray(s.rails) ? s.rails : clone(SETTINGS_DEFAULT.rails), fold: Object.assign(clone(SETTINGS_DEFAULT.fold), s.fold || {}) }); } catch (e) { /* storage unavailable */ }
+  try { const s = JSON.parse(localStorage.getItem('docs-explorer-settings-v7') || 'null'); if (s) SET = Object.assign(SET, s, { rails: Array.isArray(s.rails) ? s.rails : clone(SETTINGS_DEFAULT.rails) }); } catch (e) { /* storage unavailable */ }
   if (SET.theme === 'cool') SET.theme = 'attractor';
   const saveSettings = () => { try { localStorage.setItem('docs-explorer-settings-v7', JSON.stringify(SET)); } catch (e) { /* ignore */ } };
 
   // ---------- profile editing ----------
   const normF = (f) => JSON.stringify(Object.keys(f).filter((k) => f[k] != null && !(Array.isArray(f[k]) && !f[k].length)).sort().map((k) => [k, Array.isArray(f[k]) ? f[k].slice().sort() : f[k]]));
-  function changed(msg) { S.modified = true; if (msg) toast(msg); render(); }
+  function changed(msg) { S.modified = true; if (msg) { toast(msg); fxReact(msg); } render(); }
+  const fxReact = (msg) => { if (SET.theme === 'attractor' && SET.fx && SET.fx.react) FX.pulse = /^Added/.test(msg) ? 1 : /^Removed/.test(msg) ? -1 : FX.pulse; };
   function merge(f) { // push f, merging with a filter that differs only in its entries
     const rest = (x) => normF(Object.assign({}, x, { entries: null }));
     const same = f.entries && S.profile.filters.find((g) => g.entries && !g.url && rest(g) === rest(f));
     if (same) f.entries.forEach((e) => { if (!same.entries.includes(e)) same.entries.push(e); }); else S.profile.filters.push(f);
   }
-  function addFilter(f) {
+  function addFilter(f, note) { // note: said after the count, e.g. what the rule can't keep
     Object.keys(f).forEach((k) => { if (f[k] === undefined) delete f[k]; });
     const before = files(S.taken), snap = clone(S.profile);
     if (S.profile.filters.some((g) => normF(g) === normF(f))) { toast('Already in the profile'); return; }
     merge(f);
+    const sw = f.entries ? withSoftware(f.entries, f.types || null) : '';
     const after = files(takenBy(S.profile));
     if (after === before) { S.profile = snap; toast('Already in the profile'); return; }
-    changed('Added ' + fmt(after - before) + ' file' + (after - before === 1 ? '' : 's'));
+    changed('Added ' + fmt(after - before) + ' file' + (after - before === 1 ? '' : 's') + sw + (note ? ' (' + note + ')' : ''));
+  }
+  // adding hardware can also add its software: the support tables say which software, and which releases run there
+  function withSoftware(hw, types) { // merges the software's rules when the setting is on; returns words for the toast
+    if (!SET.withSw) return '';
+    const R = F().rel, plats = hw.filter((n) => PLATFORMS.includes(n)), added = new Set();
+    plats.forEach((p) => relsFor(p).forEach((x) => {
+      // one relation can name several software sharing one numbering (ExtremeXOS became Switch Engine): on the default, only the newest
+      let cands = x.software.map((s) => BY_NAME[SW_ENTRY[s]]).filter(Boolean).map((row) => {
+        const ds = row.edocs.filter((d) => relOK(d, R) && covers(x, d.rel) && (!types || types.includes(d.type)) && !(F().tr && d.tr));
+        return { row, ds, top: ds.map((d) => vkey(d.rel)).filter(Boolean).sort(vcmp).pop() };
+      }).filter((c) => c.ds.length);
+      if (relDefault(R) && cands.length > 1) cands = [cands.sort((a, b) => vcmp(b.top || [], a.top || []))[0]];
+      cands.forEach(({ row, ds }) => {
+        const f = { entries: [row.n] }; if (types) f.types = types.slice();
+        const open = x.kind === 'range' && !x.max && !R.from && !R.to && !R.specific.length && row.edocs.every((d) => !relOK(d, R) || !vkey(d.rel) || covers(x, d.rel));
+        if (open) { const rel = curReleases(); if (rel) f.releases = rel; } // every release the filter shows runs there: keep the filter's own rule, so it stays current
+        else f.releases = [...new Set(ds.map((d) => d.rel))];
+        merge(f); added.add(row.n);
+      });
+    }));
+    if (added.size) return ', with ' + [...added].join(' and ');
+    return hw.some(isHardware) && !plats.length ? ' (no software pairing known for it yet)' : '';
   }
   function removePair(entry, type) { // stop taking one entry's documents of one type, now and in future releases
     const out = [];
@@ -810,7 +869,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   const curReleases = () => fromRules(F().rel);
   const byPlace = () => S.page === 'matrix' && S.v.matrix.group === 'path';
   const rowDocs = (r) => (byPlace() ? r.docs : r.edocs);
-  function togglePairs(pairs) { // pairs of [row, type]: all taken -> remove, else add what the filters show
+  function togglePairs(pairs, whole) { // pairs of [row, type]: all taken -> remove, else add what the filters show; whole: rows or groups, not one type
     const docs = pairs.flatMap(([r, t]) => rowDocs(r).filter((d) => d.type === t && pass(d)));
     if (!docs.length) return;
     const allIn = docs.every((d) => S.taken.has(d.id)), before = files(S.taken);
@@ -818,12 +877,14 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       pairs.forEach(([r, t]) => removePair(r.n, t));
       const now = takenBy(S.profile), still = [...new Set(docs.filter((d) => now.has(d.id)).map((d) => d.url))]; // taken through another entry's rule
       if (still.length) S.profile.skip = [...new Set((S.profile.skip || []).concat(still))];
-      changed('Removed ' + fmt(before - files(takenBy(S.profile))) + ' files'); return;
+      changed('Removed ' + nFiles(before - files(takenBy(S.profile)))); return;
     }
     const byTypes = {};
     pairs.forEach(([r, t]) => { (byTypes[t] = byTypes[t] || []).push(r.n); });
     Object.keys(byTypes).forEach((t) => { const f = { entries: byTypes[t], types: [t] }; const rel = curReleases(); if (rel) f.releases = rel; merge(f); });
-    changed('Added ' + fmt(files(takenBy(S.profile)) - before) + ' files');
+    const hw = [...new Set(pairs.map(([r]) => r.n))];
+    const sw = whole ? withSoftware(hw, F().types.length ? F().types.slice() : null) : [...new Set(Object.keys(byTypes).map((t) => withSoftware(byTypes[t], [t])))].filter(Boolean).join('');
+    changed('Added ' + nFiles(files(takenBy(S.profile)) - before) + sw);
   }
   function addDocs(docs) {
     const urls = [...new Set(docs.filter((d) => !S.taken.has(d.id)).map((d) => d.url))];
@@ -885,6 +946,8 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   const starterProfile = (n) => ({ about: P[n].about, filters: P[n].filters, snapshots: P[n].snapshots || [] });
   function copy(text, msg) { const ok = () => toast(msg || 'Copied'); try { navigator.clipboard.writeText(text).then(ok, () => prompt('Copy:', text)); } catch (e) { prompt('Copy:', text); } }
   const base = () => location.href.split('#')[0];
+  const viewLink = () => base() + '#/' + S.page + '?v=' + enc({ f: S.f, v: S.v[S.page] }); // the page, its filters and how it's grouped
+  const profileLink = () => base() + '#/checkout?p=' + enc({ n: S.pname, p: S.profile });
   const fileName = () => (S.pname === 'New Profile' ? 'my-profile' : S.pname);
   function saveBlob(name, blob) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
   function saveProfile() { saveBlob(fileName() + '.yaml', new Blob([toYaml(S.profile)], { type: 'text/yaml' })); S.modified = false; toast('Saved ' + fileName() + '.yaml'); render(); }
@@ -900,8 +963,6 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     if (skip !== 'rel' && !relOK(d, f.rel)) return false;
     if (f.tr && d.tr) return false;
     if (f.since && d.m && mN(d.m) < mN(NEWEST) - f.since) return false;
-    if (f.show === 'in' && !S.taken.has(d.id)) return false;
-    if (f.show === 'out' && S.taken.has(d.id)) return false;
     if (skip !== 'types' && f.types.length && !f.types.includes(d.type)) return false;
     if (skip !== 'values' && SET.valueFilter && f.values.length && !f.values.includes(d.value)) return false;
     if (skip !== 'headings' && f.headings.length && !d.er.some((x) => f.headings.includes(x.h))) return false;
@@ -926,6 +987,8 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   }
 
   // ---------- small UI pieces ----------
+  const LINK_ICON = '<svg class="pi sm" viewBox="0 0 20 20" aria-hidden="true"><path d="M8.5 11.5a3 3 0 0 0 4.2 0l2.6-2.6a3 3 0 0 0-4.2-4.2l-1 1"/><path d="M11.5 8.5a3 3 0 0 0-4.2 0l-2.6 2.6a3 3 0 0 0 4.2 4.2l1-1"/></svg>';
+  const PIN_ICON = '<svg class="pi sm" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 3.5h5l-1 4 3 3h-9l3-3z"/><line x1="10" y1="10.5" x2="10" y2="16.5"/></svg>';
   let toastT;
   function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 1800); }
   function status() {
@@ -968,16 +1031,16 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   grip(gr, (dx) => { SET.rw = Math.max(240, Math.min(620, rw0 - dx)); document.documentElement.style.setProperty('--rw', SET.rw + 'px'); }, () => render());
 
   // ---------- left panel: filters ----------
-  function facet(key, title, options, c, extra, summary) {
+  function facet(key, title, options, c, extra, summary) { // options: [value, label html?, value colour?]
     const f = F(), shut = SET.shut.includes(key), multi = options.length > 0;
     const chosen = multi ? f[key] : null, sum = summary != null ? summary : chosen && chosen.length ? chosen.length + ' chosen' : '';
     let body = extra || '';
     if (multi) {
       body += '<div class="tools"><span class="muted">' + options.length + ' options</span><span class="grow"></span>' + (chosen.length ? '<button type="button" data-clear="' + key + '">Clear</button>' : '') + '</div>' +
-        '<div class="' + (options.length > 8 ? 'list' : '') + '">' + options.map(([v, label]) => {
+        '<div class="' + (options.length > 8 ? 'list' : '') + '">' + options.map(([v, label, vc]) => {
           const n = c[v] || 0;
-          return '<label class="opt' + (n ? '' : ' zero') + '"><input type="checkbox" data-f="' + key + '" value="' + esc(v) + '"' + (chosen.includes(v) ? ' checked' : '') + '>' +
-            '<span class="lb">' + (label || '<span>' + esc(v) + '</span>') + '</span><button class="only" type="button" data-only="' + key + '" data-v="' + esc(v) + '" title="Choose only this">only</button><span class="n">' + fmt(n) + '</span></label>';
+          return '<label class="opt' + (n ? '' : ' zero') + '" title="' + esc(v) + '"><input type="checkbox"' + (vc ? ' class="vk vc-' + vc + '"' : '') + ' data-f="' + key + '" value="' + esc(v) + '"' + (chosen.includes(v) ? ' checked' : '') + '>' +
+            '<span class="lb">' + (label || '<span>' + esc(v) + '</span>') + '</span><span class="oc"><span class="n">' + fmt(n) + '</span><button class="only" type="button" data-only="' + key + '" data-v="' + esc(v) + '" title="Choose only this">only</button></span></label>';
         }).join('') + '</div>';
     }
     return '<section class="facet' + (shut ? ' shut' : '') + '"><button class="fh" type="button" data-shut="' + key + '" aria-expanded="' + !shut + '"><span class="caret" style="transform:rotate(' + (shut ? -45 : 45) + 'deg)"></span>' + title + '<span class="sum">' + esc(sum) + '</span></button><div class="fb">' + body + '</div></section>';
@@ -1007,16 +1070,13 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   function renderFilters() {
     const f = F(), box = $('filters');
     if ($('rail-left').hidden) return;
-    const radios = (key, opts) => '<div class="radios">' + opts.map(([v, l]) => '<label><input type="radio" name="r-' + key + '" data-radio="' + key + '" value="' + v + '"' + (f[key] === v ? ' checked' : '') + '>' + l + '</label>').join('') + '</div>';
-    const lb = (sq, text) => '<i class="sq v-' + sq + '"></i><span>' + esc(text) + '</span>';
     let h = '<div class="ftools"><input type="search" id="f-q" placeholder="Search titles and entries" value="' + esc(f.q) + '"></div>' +
-      '<div class="ftools"><span class="note">Filters</span><span class="grow"></span><button type="button" id="f-expand">Expand All</button><button type="button" id="f-collapse">Collapse All</button></div>';
-    h += facet('show', 'Show', [], {}, radios('show', [['all', 'Everything'], ['in', 'In the profile'], ['out', 'Not in the profile']]), { all: '', in: 'in the profile', out: 'not in it' }[f.show]);
+      '<div class="ftools"><button type="button" id="f-link" title="Copy a link to this page with these filters">' + LINK_ICON + 'Link</button><span class="grow"></span><button type="button" id="f-expand">Expand All</button><button type="button" id="f-collapse">Collapse All</button></div>';
     const sc = counts('sites', (d) => d.r.site);
-    h += facet('sites', 'Sites', [], {}, ['docs', 'main'].map((s) => '<label class="opt"><input type="checkbox" data-site="' + s + '"' + (f.sites.includes(s) ? ' checked' : '') + '><span class="lb"><span>' + HOST[s] + '</span></span><span></span><span class="n">' + fmt(sc[s]) + '</span></label>').join(''), f.sites.length < 2 ? (f.sites.length ? SITE[f.sites[0]] + ' only' : 'none') : '');
+    h += facet('sites', 'Sites', [], {}, ['docs', 'main'].map((s) => '<label class="opt"><input type="checkbox" data-site="' + s + '"' + (f.sites.includes(s) ? ' checked' : '') + '><span class="lb"><span>' + HOST[s] + '</span></span><span class="oc"><span class="n">' + fmt(sc[s]) + '</span></span></label>').join(''), f.sites.length < 2 ? (f.sites.length ? SITE[f.sites[0]] + ' only' : 'none') : '');
     h += facet('releases', 'Releases', [], {}, releasesFacet(), relDefault(f.rel) ? '' : describeRules(f.rel));
-    h += facet('types', 'Type', TYPES.map((t) => [t, lb(VALUE[t], t)]), counts('types', (d) => d.type));
-    if (SET.valueFilter) h += facet('values', 'Value', VALUES.map((v) => [v, lb(v, v)]), counts('values', (d) => d.value));
+    h += facet('types', 'Type', TYPES.map((t) => [t, '', VALUE[t]]), counts('types', (d) => d.type));
+    if (SET.valueFilter) h += facet('values', 'Value', VALUES.map((v) => [v, '', v]), counts('values', (d) => d.value));
     h += facet('headings', 'Docs-Site Heading', HEADINGS.map((x) => [x]), counts('headings', (d) => d.er[0].h));
     const ec = {}; DOCS.forEach((d) => { if (pass(d, 'entries')) d.er.forEach((x) => { ec[x.n] = (ec[x.n] || 0) + 1; }); });
     const ents = ROWS.filter((r) => (!entryQ || r.n.toLowerCase().includes(entryQ)) && (ec[r.n] || f.entries.includes(r.n))).sort((a, b) => (ec[b.n] || 0) - (ec[a.n] || 0));
@@ -1046,8 +1106,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   rail.addEventListener('change', (e) => {
     const t = e.target, f = F(), R = f.rel;
     const flip = (arr, v, on) => (on ? [...new Set(arr.concat([v]))] : arr.filter((x) => x !== v));
-    if (t.dataset.radio) f[t.dataset.radio] = t.value;
-    else if (t.dataset.preset) R.presets = flip(R.presets, t.dataset.preset, t.checked);
+    if (t.dataset.preset) R.presets = flip(R.presets, t.dataset.preset, t.checked);
     else if (t.dataset.rel === 'all') R.all = t.checked;
     else if (t.dataset.rel === 'newestOn') R.newest = t.checked ? +(rail.querySelector('input[data-rel="newest"]').value || 2) : 0;
     else if (t.dataset.rel === 'newest') { if (R.newest) R.newest = Math.max(1, +t.value || 1); }
@@ -1073,9 +1132,10 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   rail.addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
     const f = F();
-    if (b.id === 'f-expand' || b.id === 'f-collapse') { SET.shut = b.id === 'f-expand' ? [] : ['show', 'sites', 'releases', 'types', 'values', 'headings', 'entries', 'runsOn', 'formats', 'since']; saveSettings(); renderFilters(); return; }
+    if (b.id === 'f-expand' || b.id === 'f-collapse') { SET.shut = b.id === 'f-expand' ? [] : ['sites', 'releases', 'types', 'values', 'headings', 'entries', 'runsOn', 'formats', 'since']; saveSettings(); renderFilters(); return; }
     if (b.dataset.shut) { const k = b.dataset.shut; SET.shut = SET.shut.includes(k) ? SET.shut.filter((x) => x !== k) : SET.shut.concat([k]); saveSettings(); renderFilters(); return; }
     if (b.id === 'rel-norange') { f.rel.from = ''; f.rel.to = ''; render(); return; }
+    if (b.id === 'f-link') { copy(viewLink(), 'Link to this view copied'); return; }
     if (b.dataset.clear) f[b.dataset.clear] = [];
     else if (b.dataset.only) { e.preventDefault(); f[b.dataset.only] = f[b.dataset.only].length === 1 && f[b.dataset.only][0] === b.dataset.v ? [] : [b.dataset.v]; if (b.dataset.only === 'entries') { f.rel.from = ''; f.rel.to = ''; f.rel.specific = []; } }
     else return;
@@ -1087,7 +1147,6 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     const f = F(), d = DEFAULT_F(), chips = [];
     const add = (label, undo) => chips.push([label, undo]);
     if (f.q) add('“' + f.q + '”', () => { f.q = ''; });
-    if (f.show !== 'all') add(f.show === 'in' ? 'in the profile' : 'not in the profile', () => { f.show = 'all'; });
     if (f.sites.length < 2) add(f.sites.length ? SITE[f.sites[0]] + ' only' : 'no sites', () => { f.sites = d.sites; });
     if (!relDefault(f.rel)) add(describeRules(f.rel), () => { f.rel = DEFAULT_REL(); });
     ['types', 'values', 'headings', 'entries', 'formats'].forEach((k) => f[k].forEach((v) => add(v, () => { f[k] = f[k].filter((x) => x !== v); })));
@@ -1097,24 +1156,36 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     if (!f.tr) add('translations included', () => { f.tr = true; });
     $('f-count').textContent = chips.length || '';
     if (!chips.length) { $('chips').innerHTML = ''; return; }
-    const bridge = asFilter(), empty = !Object.keys(bridge).length;
-    $('chips').innerHTML = chips.map((c, i) => '<span class="c">' + esc(c[0]) + '<button type="button" data-chip="' + i + '" aria-label="Remove">×</button></span>').join('') +
-      '<button class="btn ghost small" type="button" id="c-clear">Clear All</button>' +
-      '<button class="btn small" type="button" id="c-add"' + (empty ? ' disabled' : ' title="Adds a rule: ' + esc(describe(bridge).join(' · ')) + '. Future matching files join automatically.' + (f.q ? ' (the search text is not saved)' : '') + (f.runsOn.length || f.forRel ? ' (Compatibility narrows what you see; it is not saved)' : '') + '"') + '>Add Current Filter to Profile</button>' +
-      '<button class="btn ghost small" type="button" id="c-link">Link to This View</button>';
+    $('chips').innerHTML = '<button class="btn ghost small" type="button" id="c-clear">Clear All</button>' +
+      chips.map((c, i) => '<span class="c">' + esc(c[0]) + '<button type="button" data-chip="' + i + '" aria-label="Remove">×</button></span>').join('');
     $('chips').onclick = (e) => {
       const b = e.target.closest('button'); if (!b) return;
       if (b.dataset.chip != null) { chips[+b.dataset.chip][1](); render(); }
       else if (b.id === 'c-clear') { S.f = DEFAULT_F(); render(); }
-      else if (b.id === 'c-add') addFilter(asFilter());
-      else if (b.id === 'c-link') copy(base() + '#/' + S.page + '?v=' + enc({ f: S.f, v: S.v[S.page] }), 'Link to this view copied');
     };
   }
+  // + Add All Filtered: what the filters show, kept as a rule, so later releases that match join on their own
+  function addAllFiltered() {
+    const f = F(), bridge = asFilter();
+    if (!$('chips').children.length) { toast('Choose a filter first: this adds everything the filters show'); return; }
+    if (!Object.keys(bridge).length) { toast("These filters can't be kept: only the search text or Compatibility is set"); return; }
+    const notes = (f.q ? ['the search text is not kept'] : []).concat(f.runsOn.length || f.forRel ? ['Compatibility is not kept'] : []);
+    addFilter(bridge, notes.join('; '));
+  }
+  $('t-add').onclick = addAllFiltered;
 
-  // ---------- right panel: the profile, as a summary ----------
+  // ---------- right panel: the profile, as a cart: one line per entry, opening to its files ----------
+  const cart = { q: '', open: new Set(), all: new Set() };
+  const profileDocs = () => [...new Map(DOCS.filter((d) => S.taken.has(d.id)).map((d) => [d.url, d])).values()];
+  function cartLines(onDocs) { // [{r, docs, rules, pinned}]: by the entry each file belongs to first, biggest first
+    const by = new Map(), fs = S.profile.filters;
+    onDocs.forEach((d) => { const r = d.er[0]; (by.get(r) || by.set(r, []).get(r)).push(d); });
+    return [...by].map(([r, docs]) => ({ r, docs, rules: fs.filter((f) => !f.url && docs.some((d) => matches(f, d))), pinned: docs.filter((d) => fs.some((f) => f.url && matches(f, d))).length }))
+      .sort((a, b) => b.docs.length - a.docs.length || a.r.n.localeCompare(b.r.n));
+  }
   function renderProfile() {
     const box = $('profile'); if ($('rail-right').hidden) return;
-    const onDocs = [...new Map(DOCS.filter((d) => S.taken.has(d.id)).map((d) => [d.url, d])).values()];
+    const onDocs = profileDocs();
     const byV = {}; onDocs.forEach((d) => { byV[d.value] = (byV[d.value] || 0) + 1; });
     const max = Math.max(1, ...Object.values(byV)), snaps = S.profile.snapshots || [];
     const opts = (S.modified ? '<option value="mod">' + esc(S.pname) + ' · modified</option>' : '') + '<option value="new">New Profile</option><optgroup label="Starter Profiles">' + STARTERS.map((n) => '<option value="s:' + n + '">' + n + '</option>').join('') + '</optgroup>' +
@@ -1122,48 +1193,53 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     const bad = unknownEntries(S.profile);
     let h = '<div class="pp-head"><select id="p-select" aria-label="Profile">' + opts + '</select>' +
       '<div class="pp-row"><span class="big">' + fmt(onDocs.length) + '</span><span class="muted">files' + (snaps.length ? ' + ' + snaps.length + ' snapshot' + (snaps.length > 1 ? 's' : '') : '') + (S.modified ? ' · <span style="color:var(--warn)">modified</span>' : '') + '</span><span class="grow"></span>' +
-      '<button class="btn ghost small" type="button" id="p-save">Save</button><button class="btn ghost small" type="button" id="p-link">Copy Link</button></div>' +
+      '<button class="btn ghost small" type="button" id="p-save">Save</button><button class="btn ghost small lk" type="button" id="p-link" title="Copy a link that opens this profile">' + LINK_ICON + 'Link</button></div>' +
       (S.profile.about ? '<p class="note">' + esc(S.profile.about) + '</p>' : '') +
       (bad.length ? '<span class="chip warn" title="' + esc(bad.join(', ')) + '">' + bad.length + ' entr' + (bad.length > 1 ? 'ies' : 'y') + ' not in the catalog</span>' : '') + '</div>';
     h += '<div class="vbars">' + VALUES.map((v) => '<div><span>' + v + '</span><b class="v-' + v + '" style="width:' + ((byV[v] || 0) / max * 100) + '%"></b><span class="n">' + fmt(byV[v] || 0) + '</span></div>').join('') + '</div>';
     h += '<button class="btn" type="button" id="p-checkout">Checkout: Get the Files →</button>';
-    const byE = new Map();
-    onDocs.forEach((d) => { const r = d.er[0]; const e = byE.get(r) || byE.set(r, { n: 0, types: {} }).get(r); e.n++; e.types[d.type] = (e.types[d.type] || 0) + 1; });
-    const ents = [...byE].sort((a, b) => b[1].n - a[1].n);
-    // folds: each remembers open or shut and scrolls on its own, so the panel works with Details at the side or the bottom
-    const fold = (k, title, count, note, body) => '<details class="sec fold" data-fold="' + k + '"' + (SET.fold[k] ? ' open' : '') + '><summary><b>' + title + '</b> <span class="muted mono">' + count + '</span>' + (note ? ' <span class="note">' + note + '</span>' : '') + '</summary><div class="fold-body">' + body + '</div></details>';
-    h += fold('takes', 'What It Takes', ents.length + ' entries', '', ents.length ? '<div class="glance">' + ents.map(([r, e]) =>
-      '<div class="gl"><div class="glh"><button class="lnk" type="button" data-entry="' + r.i + '" title="' + esc(r.n) + '">' + esc(r.n) + '</button><span class="mono">' + e.n + '</span></div><div class="glt">' + Object.entries(e.types).sort((a, b) => b[1] - a[1]).map(([ty, c]) => '<span class="chip"><i class="sq v-' + VALUE[ty] + '"></i>' + esc(SHORT[ty] ? SHORT[ty].replace('&shy;', '') : ty) + ' ' + c + '</span>').join('') + '</div></div>').join('') + '</div>' :
-      '<p class="note">Nothing yet. Click counts in the Matrix, use "+ Add These", or pick a starter profile above.</p>');
-    if (snaps.length) h += fold('snaps', 'Snapshots', snaps.length, '', snaps.map((n) => '<div class="filter"><button class="x" type="button" data-rmsnap="' + esc(n) + '" aria-label="Remove">×</button><b>' + esc(SNAP[n] ? SNAP[n].title : n) + '</b><span>' + (SNAP[n] ? SNAP[n].tables + ' tables' : 'not in the catalog') + '</span></div>').join(''));
-    h += fold('rules', 'Rules', S.profile.filters.length, 'how it chooses', (S.profile.filters.map((f, i) => { const p = describe(f); return '<div class="filter"><button class="x" type="button" data-rm="' + i + '" aria-label="Remove">×</button><b>' + esc(p[0]) + '</b><span>' + esc(p.slice(1).join(' · ')) + '</span></div>'; }).join('') || '<p class="note">None yet.</p>'));
-    h += fold('files', 'Files', fmt(onDocs.length), 'every file it takes', '<div class="pf-tools"><input type="search" id="p-fq" placeholder="Find a title, entry or type" value="' + esc(pFiles.q) + '"><select id="p-fg" aria-label="Group files"><option value="entry">By Entry</option><option value="type">By Type</option><option value="none">No Groups</option></select></div><div id="p-files"></div>');
+    if (PLATFORMS.length) h += '<label class="opt withsw" title="Uses the support tables: adding a switch also adds the software releases that run on it, of the same types"><input type="checkbox" id="p-withsw"' + (SET.withSw ? ' checked' : '') + '><span class="lb"><span>Adding hardware also adds its software</span></span></label>';
+    h += '<div class="pf-tools"><input type="search" id="p-fq" placeholder="Find a title, entry or type" value="' + esc(cart.q) + '"></div><div id="p-lines"></div>';
     if ((S.profile.skip || []).length) h += '<p class="note">' + S.profile.skip.length + ' files left out one by one. <button class="btn ghost small" type="button" id="s-unskip">Include Them Again</button></p>';
-    const top = box.scrollTop; box.innerHTML = h; $('p-select').value = S.modified ? 'mod' : (S.loaded || 'new'); $('p-fg').value = SET.pfGroup;
-    renderProfileFiles(onDocs); box.scrollTop = top;
-    box.querySelectorAll('details.fold').forEach((el) => { el.ontoggle = () => { SET.fold[el.dataset.fold] = el.open; saveSettings(); if (el.open && el.dataset.fold === 'files') renderProfileFiles(); }; });
+    const top = box.scrollTop; box.innerHTML = h; $('p-select').value = S.modified ? 'mod' : (S.loaded || 'new');
+    renderCartLines(onDocs); box.scrollTop = top;
   }
-  const pFiles = { q: '', all: false };
-  function renderProfileFiles(onDocs) { // the Files fold: every file the profile takes, filtered and grouped; drawn only while open
-    const el = $('p-files'); if (!el || !SET.fold.files) return;
-    onDocs = onDocs || [...new Map(DOCS.filter((d) => S.taken.has(d.id)).map((d) => [d.url, d])).values()];
-    const q = pFiles.q.trim().toLowerCase();
-    const ds = onDocs.filter((d) => matchesQuery((d.t + ' ' + d.er[0].n + ' ' + d.type).toLowerCase(), q));
-    const key = SET.pfGroup === 'type' ? (d) => d.type : SET.pfGroup === 'entry' ? (d) => d.er[0].n : () => '';
-    const groups = new Map(); ds.slice().sort((a, b) => a.t.localeCompare(b.t)).forEach((d) => { const k = key(d); (groups.get(k) || groups.set(k, []).get(k)).push(d); });
-    const order = [...groups].sort((a, b) => (SET.pfGroup === 'type' ? TYPES.indexOf(a[0]) - TYPES.indexOf(b[0]) : a[0].localeCompare(b[0])));
-    const CAP = 300; let shown = 0, h = q ? '<p class="note">' + fmt(ds.length) + ' of ' + fmt(onDocs.length) + ' files match.</p>' : '';
-    h += '<div class="dl">';
-    for (const [k, list] of order) {
-      if (!pFiles.all && shown >= CAP) break;
-      if (k) h += '<div class="fgh">' + (SET.pfGroup === 'type' ? '<i class="sq v-' + VALUE[k] + '"></i>' : '') + esc(k) + ' <span class="muted mono">' + list.length + '</span></div>';
-      const take = pFiles.all ? list : list.slice(0, CAP - shown); shown += take.length;
-      h += take.map(docRow).join('');
-    }
-    h += '</div>';
-    if (!ds.length) h = '<p class="note">' + (onDocs.length ? 'No file matches.' : 'No files yet.') + '</p>';
-    else if (shown < ds.length) h += '<button class="btn ghost small" type="button" id="p-fall">Show All ' + fmt(ds.length) + '</button>';
-    el.innerHTML = h;
+  function renderCartLines(onDocs) { // the cart's lines; redrawn alone while typing in the find box
+    const el = $('p-lines'); if (!el) return;
+    onDocs = onDocs || profileDocs();
+    const q = cart.q.trim().toLowerCase(), snaps = S.profile.snapshots || [], CAP = 300;
+    const hit = (d) => matchesQuery((d.t + ' ' + d.er[0].n + ' ' + d.type).toLowerCase(), q);
+    let lines = cartLines(onDocs);
+    if (q) lines = lines.map((x) => Object.assign({}, x, { shown: x.docs.filter(hit) })).filter((x) => x.shown.length);
+    let h = q ? '<p class="note">' + fmt(lines.reduce((n, x) => n + x.shown.length, 0)) + ' of ' + fmt(onDocs.length) + ' files match.</p>' : '';
+    h += lines.map((x) => {
+      const r = x.r, open = !!q || cart.open.has(r.i), types = {};
+      x.docs.forEach((d) => { types[d.type] = (types[d.type] || 0) + 1; });
+      const live = x.rules.length ? '<span class="mk" title="Added by a filter, so new releases that match join on their own: ' + esc(x.rules.map((f) => describe(f).join(' · ')).join(' | ')) + '">↻</span>' : '';
+      const pin = x.pinned ? '<span class="mk" title="' + x.pinned + ' added one by one: they stay as they are">' + PIN_ICON + '</span>' : '';
+      let body = '';
+      if (open) {
+        const ds = (q ? x.shown : x.docs).slice().sort((a, b) => TYPES.indexOf(a.type) - TYPES.indexOf(b.type) || a.t.localeCompare(b.t));
+        const take = cart.all.has(r.i) ? ds : ds.slice(0, CAP);
+        body = '<div class="dl">' + take.map(docRow).join('') + '</div>' + (take.length < ds.length ? '<button class="btn ghost small" type="button" data-call="' + r.i + '">Show All ' + fmt(ds.length) + '</button>' : '');
+      }
+      return '<div class="cl-item' + (open ? ' open' : '') + '"><div class="clh"><button class="cv" type="button" data-copen="' + r.i + '" aria-expanded="' + open + '" aria-label="Show its files"><span class="caret"></span></button>' +
+        '<button class="cl-t" type="button" data-entry="' + r.i + '" title="' + esc(r.n) + ': details"><span class="nm">' + esc(r.n) + '</span></button>' + live + pin +
+        '<button class="n mono" type="button" data-copen="' + r.i + '" title="Show its files">' + fmt(x.docs.length) + '</button><button class="x" type="button" data-rment="' + r.i + '" title="Take it all out">×</button></div>' +
+        '<div class="glt">' + Object.entries(types).sort((a, b) => b[1] - a[1]).map(([ty, c]) => '<span class="chip"><i class="sq v-' + VALUE[ty] + '"></i>' + esc(SHORT[ty] ? SHORT[ty].replace('&shy;', '') : ty) + ' ' + c + '</span>').join('') + '</div>' + body + '</div>';
+    }).join('');
+    if (!q) h += snaps.map((n) => '<div class="cl-item"><div class="clh"><span class="cv"></span><button class="cl-t" type="button" data-snap="' + esc(n) + '"><span class="nm">' + esc(SNAP[n] ? SNAP[n].title : n) + '</span></button><span class="chip">' + (SNAP[n] ? SNAP[n].tables + ' tables' : 'not in the catalog') + '</span><button class="x" type="button" data-rmsnap="' + esc(n) + '" title="Take it out">×</button></div></div>').join('');
+    if (!onDocs.length && !snaps.length) h = '<p class="note">Nothing yet. Click counts in the Matrix, use "+ Add All Filtered", or pick a starter profile above.</p>';
+    else if (q && !lines.length) h = '<p class="note">No file matches.</p>';
+    el.innerHTML = '<div class="cart">' + h + '</div>';
+  }
+  function removeEntry(r) { // take out a whole cart line: rules stop naming it, its single files go, anything still matched is left out
+    const docs = profileDocs().filter((d) => d.er[0] === r), urls = new Set(docs.map((d) => d.url)), before = files(S.taken);
+    [...new Set(docs.map((d) => d.type))].forEach((t) => removePair(r.n, t));
+    S.profile.filters = S.profile.filters.map((f) => (f.url ? Object.assign({}, f, { url: [].concat(f.url).filter((u) => !urls.has(u)) }) : f)).filter((f) => !f.url || f.url.length);
+    const now = takenBy(S.profile), still = [...urls].filter((u) => DOCS.some((d) => d.url === u && now.has(d.id)));
+    if (still.length) S.profile.skip = [...new Set((S.profile.skip || []).concat(still))];
+    changed('Removed ' + nFiles(before - files(takenBy(S.profile))));
   }
   const prof = $('profile');
   function openProfilePicker(sel) {
@@ -1175,7 +1251,9 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     i.click(); if (sel) sel.value = S.loaded || 'new';
   }
   prof.addEventListener('change', (e) => {
-    const t = e.target; if (t.id === 'p-fg') { SET.pfGroup = t.value; saveSettings(); renderProfileFiles(); return; } if (t.id !== 'p-select') return;
+    const t = e.target;
+    if (t.id === 'p-withsw') { SET.withSw = t.checked; saveSettings(); return; }
+    if (t.id !== 'p-select') return;
     const v = t.value;
     if (v === 'mod') return;
     if (v === 'new') loadProfile({ filters: [] }, 'New Profile', '');
@@ -1184,23 +1262,30 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   });
   prof.addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
-    if (b.dataset.rm) { S.profile.filters.splice(+b.dataset.rm, 1); changed('Filter removed'); }
+    if (b.dataset.copen) { const i = +b.dataset.copen; cart.open.has(i) ? cart.open.delete(i) : cart.open.add(i); renderCartLines(); }
+    else if (b.dataset.call) { cart.all.add(+b.dataset.call); renderCartLines(); }
+    else if (b.dataset.rment) removeEntry(ROWS[+b.dataset.rment]);
     else if (b.dataset.rmsnap) toggleSnap(b.dataset.rmsnap);
+    else if (b.dataset.snap) openSnap(b.dataset.snap);
     else if (b.id === 's-unskip') { S.profile.skip = []; changed(); }
     else if (b.id === 'p-save') saveProfile();
-    else if (b.id === 'p-link') copy(base() + '#/checkout?p=' + enc({ n: S.pname, p: S.profile }), 'Link to this profile copied');
+    else if (b.id === 'p-link') copy(profileLink(), 'Link to this profile copied');
     else if (b.id === 'p-checkout') go('checkout');
-    else if (b.id === 'p-fall') { pFiles.all = true; renderProfileFiles(); }
     else if (b.dataset.entry) openEntry(ROWS[+b.dataset.entry]);
     else if (b.dataset.doc) openDoc(DOCS[+b.dataset.doc]);
     else if (b.dataset.tog) { const d = DOCS[+b.dataset.tog]; S.taken.has(d.id) ? removeDocs([d]) : addDocs([d]); }
   });
-  prof.addEventListener('input', (e) => { if (e.target.id === 'p-fq') { pFiles.q = e.target.value; pFiles.all = false; renderProfileFiles(); } });
+  prof.addEventListener('input', (e) => { if (e.target.id === 'p-fq') { cart.q = e.target.value; renderCartLines(); } });
 
   // ---------- page: matrix ----------
   function groupsFor(mode, rows) { // [{k, label, rows, kids?, faded?}]
     const one = (k, rs, extra) => Object.assign({ k, label: k, rows: rs }, extra || {});
     if (mode === 'az') return [one('All entries', rows.slice().sort((a, b) => a.n.localeCompare(b.n)))];
+    if (mode === 'product') { // kind › family › entry, from config/products.yaml; main-site groups aren't products
+      const of = (r) => (r.site === 'docs' && PRODUCT_OF[r.n]) || null;
+      const out = PR.kinds.map(([kind, fams]) => { const rs = rows.filter((r) => of(r) && of(r)[0] === kind); return { k: 'p|' + kind, label: kind, rows: rs, kids: fams.map((fm) => ({ k: 'p|' + kind + '|' + fm, label: fm, rows: rs.filter((r) => of(r)[1] === fm) })) }; });
+      return out.concat([one('Not a Product (Main-Site Groups)', rows.filter((r) => !of(r)), { faded: true })]);
+    }
     if (mode === 'heading') return HEADINGS.map((h) => one(h, rows.filter((r) => r.h === h))).concat([one('Main site (no docs-site heading)', rows.filter((r) => r.site === 'main'), { faded: true })]);
     if (mode === 'profile') return STARTERS.map((n) => one(n, rows.filter((r) => starterRows[n].has(r)))).concat([one('in no starter profile', rows.filter((r) => !STARTERS.some((n) => starterRows[n].has(r))))]);
     return ['docs', 'main'].map((s) => {
@@ -1212,10 +1297,10 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   }
   function renderMatrix() {
     const V = S.v.matrix, f = F();
-    $('vctl').innerHTML = '<label>Group Rows By <select id="m-group"><option value="path">Where It Lives</option><option value="heading">Docs-Site Heading</option><option value="profile">Starter Profile</option><option value="az">Nothing (A–Z)</option></select></label>' +
+    $('vctl').innerHTML = '<label>Group By <select id="m-group"><option value="path">Where It Lives</option><option value="product">Product</option><option value="heading">Docs-Site Heading</option><option value="profile">Starter Profile</option><option value="az">None (A–Z)</option></select></label>' +
       '<button class="btn ghost small" type="button" id="m-open">Open All</button><span class="note">A count adds what the filters show, or takes it out. + does the same for a whole row or group. A name opens its details.</span>';
     $('m-group').value = V.group;
-    $('m-group').onchange = function () { V.group = this.value; V.open = []; render(); };
+    $('m-group').onchange = function () { V.group = this.value; V.open = V.group === 'product' ? PR.kinds.map(([k]) => 'p|' + k) : []; render(); };
     const bucket = new Map(), inView = [];
     DOCS.forEach((d) => { if (!pass(d)) return; inView.push(d); (V.group === 'path' ? [d.r] : d.er).forEach((x) => { const k = x.i + '|' + d.type; (bucket.get(k) || bucket.set(k, []).get(k)).push(d); }); });
     let cols = f.types.length ? TYPES.filter((t) => f.types.includes(t)) : TYPES;
@@ -1234,7 +1319,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       return '<td class="c' + vc(t) + '"><button type="button" class="' + heat(docs.length) + markCls(k, docs.length) + (SET.mark === 'ring' ? ' rm' : '') + '"' + markSty(k, docs.length) + ' data-k="' + esc(key) + '" title="' + esc(label + ': ' + docs.length + ' documents, ' + k + ' in the profile') + '">' + ring(k, docs.length) + '</button></td>';
     };
     const cellsFor = (rs, key, label) => { let tot = 0; const html = cols.map((t) => { const docs = rs.flatMap((r) => bucket.get(r.i + '|' + t) || []); tot += docs.length; return cell(docs, key + '|' + t, label + ', ' + t, t); }).join(''); return html + (SET.totals ? '<td class="tot">' + fmt(tot) + '</td>' : ''); };
-    const openAll = !!f.q || f.entries.length > 0 || f.show !== 'all';
+    const openAll = !!f.q || f.entries.length > 0;
     const isOpen = (k) => openAll || V.open.includes(k);
     const headRow = (g, cls) => '<tr class="' + cls + (isOpen(g.k) ? ' open' : '') + (g.faded ? ' faded' : '') + '"><th class="rowh"><div class="in"><button class="nmb" type="button" data-grp="' + esc(g.k) + '"><span class="caret"></span><span class="nm">' + esc(g.label) + '</span><span class="n">' + g.rows.length + '</span></button><button class="add" type="button" data-grow="' + esc(g.k) + '" title="Add or take out everything in this group">+</button></div></th>' + cellsFor(g.rows, 'g|' + g.k, g.label) + '</tr>';
     const fileRows = (r, lvl) => {
@@ -1271,8 +1356,8 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       else if (b.dataset.detail) openEntry(ROWS[+b.dataset.detail]);
       else if (b.dataset.doc) fileClick(DOCS[+b.dataset.doc]);
       else if (b.dataset.fdoc) { const d = DOCS[+b.dataset.fdoc]; S.taken.has(d.id) ? removeDocs([d]) : addDocs([d]); }
-      else if (b.dataset.grow) { const rs = rowsOf[b.dataset.grow]; togglePairs(rs.flatMap((r) => cols.filter((t) => bucket.has(r.i + '|' + t)).map((t) => [r, t]))); }
-      else if (b.dataset.row) { const r = ROWS[+b.dataset.row]; togglePairs(cols.filter((t) => bucket.has(r.i + '|' + t)).map((t) => [r, t])); }
+      else if (b.dataset.grow) { const rs = rowsOf[b.dataset.grow]; togglePairs(rs.flatMap((r) => cols.filter((t) => bucket.has(r.i + '|' + t)).map((t) => [r, t])), true); }
+      else if (b.dataset.row) { const r = ROWS[+b.dataset.row]; togglePairs(cols.filter((t) => bucket.has(r.i + '|' + t)).map((t) => [r, t]), true); }
       else if (b.dataset.col) { const t = b.dataset.col; togglePairs(groups.flatMap((g) => g.rows).filter((r) => bucket.has(r.i + '|' + t)).map((r) => [r, t])); }
       else if (b.dataset.k) {
         const parts = b.dataset.k.split('|'), t = parts.pop(), kind = parts.shift(), id = parts.join('|');
@@ -1376,7 +1461,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     $('vctl').innerHTML = '<div class="sbar"><div class="sbox"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="12.6" y1="12.6" x2="17" y2="17"/></svg>' +
       '<input type="search" id="s-q" placeholder="Search titles and entries" value="' + esc(f.q) + '" aria-label="Search titles and entries" autocomplete="off">' +
       '<span class="sn">' + (f.q ? fmt(shown.length) + ' found' : fmt(shown.length) + ' shown') + '</span>' + (f.q ? '<button type="button" class="sx" id="s-qx" aria-label="Clear the search">×</button>' : '') + '</div></div>' +
-      '<label>Group By <select id="s-group"><option value="row">Entry</option><option value="type">Type</option><option value="heading">Docs-Site Heading</option><option value="release">Release</option><option value="path">Where It Lives</option><option value="none">Nothing</option></select></label>' +
+      '<label>Group By <select id="s-group"><option value="row">Entry</option><option value="type">Type</option><option value="heading">Docs-Site Heading</option><option value="release">Release</option><option value="path">Where It Lives</option><option value="none">None</option></select></label>' +
       '<label>Sort <select id="s-sort"><option value="new">Newest First</option><option value="az">Title A–Z</option><option value="rel">Release, Newest First</option></select></label>' +
       '<button class="icon" type="button" id="s-cols" aria-expanded="false">Columns</button>' +
       '<button class="btn ghost small" type="button" id="s-select" aria-pressed="' + V.select + '">' + (V.select ? 'Done Selecting' : 'Select Several') + '</button>' +
@@ -1564,11 +1649,11 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
         card('Documents by Type', bars(byType, '')) +
         card('Documents by Docs-Site Heading', bars(byHead, 'v-core')) +
         card('Published per Year', '<div class="years">' + ys.map((y) => '<div class="yr" title="' + y + ': ' + fmt(years[y]) + '"><b style="height:' + (years[y] / ymax * 100) + '%"></b><span>' + y.slice(2) + '</span></div>').join('') + '</div><p class="note">Years with a stated publish month; the most recent ' + ys.length + ' shown.</p>') +
-        card('Freshness', freshCard, true) +
         card('Most Documents', '<ol class="dlist">' + top.map((r) => '<li><button class="lnk" type="button" data-detail="' + r.i + '">' + esc(r.n) + '</button><span class="mono muted">' + fmt(r.edocs.length) + '</span></li>').join('') + '</ol>') +
         card('Recently Updated', '<ol class="dlist">' + recent.map(([r, d]) => '<li><button class="lnk" type="button" data-detail="' + r.i + '">' + esc(r.n) + '</button><span class="mono muted">' + esc(d.m) + '</span></li>').join('') + '</ol>') +
         card('Starter Profiles', '<table class="dtab"><thead><tr><th>Profile</th><th>Entries</th><th>Files</th><th></th></tr></thead><tbody>' + STARTERS.map((n) => '<tr><td>' + esc(n) + '</td><td class="mono">' + starterRows[n].size + '</td><td class="mono">' + fmt(files(takenBy(P[n]))) + '</td><td><button class="btn ghost small" type="button" data-use="' + esc(n) + '">Use</button></td></tr>').join('') + '</tbody></table>') +
         card('Snapshots and Compatibility', '<p class="note">' + fmt(SNAPS.length) + ' support pages kept whole, with ' + fmt(SNAPS.reduce((n, s) => n + s.tables, 0)) + ' tables.</p><p class="note">Compatibility: ' + PLATFORMS.length + ' hardware platforms with stated support for ' + esc(SOFTWARE.join(', ')) + ', from ' + SOURCES.length + ' support tables.</p><div class="acts2">' + PLATFORMS.map((x) => '<button class="btn ghost small" type="button" data-detail="' + BY_NAME[x].i + '">' + esc(x) + '</button>').join('') + '</div>') +
+        card('Freshness', freshCard, true) + // always last: it spans the full width, so any card after it looks like a separate group
         '</div>';
       const box = $('results'), top0 = box.scrollTop; box.innerHTML = h; box.scrollTop = top0;
       box.onclick = (e) => {
@@ -1611,7 +1696,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
       else if (b.dataset.crow) {
         const r = ROWS[+b.dataset.crow];
         if (V.path.startsWith('w:')) { const ds = r.docs.filter((d) => pass(d)); if (ds.length) (ds.every((d) => S.taken.has(d.id)) ? removeDocs : addDocs)(ds); }
-        else togglePairs(TYPES.filter((t) => r.edocs.some((d) => d.type === t && pass(d))).map((t) => [r, t]));
+        else togglePairs(TYPES.filter((t) => r.edocs.some((d) => d.type === t && pass(d))).map((t) => [r, t]), true);
       }
     };
   }
@@ -1630,7 +1715,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   }
   function docRow(d) {
     const inp = S.taken.has(d.id);
-    return '<div class="d"><span class="ok">' + (inp ? '✓' : '') + '</span><button class="tt" type="button" data-doc="' + d.id + '">' + esc(d.t) + '</button><span class="chip">' + esc(d.rel || '—') + '</span>' +
+    return '<div class="d"><span class="ok">' + (inp ? '✓' : '') + '</span><button class="tt" type="button" data-doc="' + d.id + '" title="' + esc(d.t) + '">' + esc(d.t) + '</button><span class="chip">' + esc(d.rel || '—') + '</span>' +
       '<button class="add" type="button" data-tog="' + d.id + '" title="' + (inp ? 'Take out' : 'Add') + '">' + (inp ? '−' : '+') + '</button></div>';
   }
   function detailsHtml() {
@@ -1735,7 +1820,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   }
   $('drawer').addEventListener('click', detailsClick); $('dmodal').addEventListener('click', detailsClick);
   $('dmodal').addEventListener('close', () => { if (det && det.pop) { det = null; } });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (!$('pop').hidden) closePop(); else if (det && !det.pop) { det = null; renderDetails(); } } });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (SET.fx.hide && SET.theme === 'attractor') { SET.fx.hide = false; saveSettings(); fxHide(); fxPanel(); } else if (!$('pop').hidden) closePop(); else if (det && !det.pop) { det = null; renderDetails(); } } });
 
   // ---------- popovers: legend, settings, about ----------
   let popOwner = null;
@@ -1802,53 +1887,118 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   $('a-close').onclick = () => $('about').close();
 
   // ---------- the Cool theme's background: a slowly morphing strange attractor ----------
-  const FX = { raf: 0, on: false, t: 0, last: 0, seed: 0 };
-  SET.fx = Object.assign({ speed: 1, points: 60, trail: 90, hue: 0, glow: 100, paused: false }, SET.fx || {});
+  const FX = { raf: 0, on: false, t: 0, last: 0, seed: 0, pulse: 0 };
+  // each knob: [key, label, min, max, step]; any knob can wobble on its own (an LFO: a rate and a depth)
+  const KNOBS = [['speed', 'Drift speed', 0, 4, 0.1], ['drift', 'How far the shape drifts (%)', 0, 200, 5], ['zoom', 'Zoom (%)', 50, 250, 5], ['points', 'Points per frame (thousands)', 5, 200, 5],
+    ['trail', 'Trail', 50, 99, 1], ['glow', 'Glow', 40, 250, 5], ['hue', 'Colour shift', 0, 360, 5], ['glass', 'Panel glass (%)', 0, 100, 2]];
+  const SHAPES = [['dejong', 'Peter de Jong'], ['clifford', 'Clifford'], ['svensson', 'Svensson']];
+  const PALETTES = [['aurora', 'Aurora'], ['ember', 'Ember'], ['neon', 'Neon'], ['mono', 'Moonlight']];
+  const KEEP = [['top', 'Top bar'], ['toolbar', 'Toolbar'], ['filters', 'Filters'], ['profile', 'Profile'], ['page', 'Page']];
+  SET.fx = Object.assign({ speed: 1, drift: 100, zoom: 100, points: 60, trail: 90, hue: 0, glow: 100, glass: 82, shape: 'dejong', palette: 'aurora', mirror: 0, react: true, paused: false, hide: false, keep: {}, lfo: {} }, SET.fx || {});
+  function knob(k, now) { // a knob's value now: its setting, plus its LFO if one is on
+    const K = SET.fx, [, , min, max] = KNOBS.find((x) => x[0] === k), l = K.lfo[k];
+    if (!l || !l.on) return K[k];
+    return Math.max(min, Math.min(max, K[k] + (l.depth / 100) * (max - min) / 2 * Math.sin(2 * Math.PI * l.rate * now / 1000)));
+  }
+  function paint(p, j, v, hi, drift, pal) { // one pixel's colour from its density v (0..1)
+    if (pal === 'ember') { p[j] = 255 * Math.sqrt(v); p[j + 1] = 150 * v * v + 90 * hi; p[j + 2] = 30 * v + 160 * hi; }
+    else if (pal === 'neon') { p[j] = 230 * v * (0.4 + 0.6 * drift) + 25 * hi; p[j + 1] = 40 * v + 215 * hi; p[j + 2] = 200 * v + 55 * hi; }
+    else if (pal === 'mono') { p[j] = 150 * v + 105 * hi; p[j + 1] = 175 * v + 80 * hi; p[j + 2] = 215 * v + 40 * hi; }
+    else { p[j] = 110 * v * (1 - v) * (0.6 + 0.8 * drift) + 235 * hi; p[j + 1] = 60 * v + 190 * v * v + 20 * hi; p[j + 2] = 210 * v + 45 * hi; } // violet at the thin edges, cyan to white in the dense core
+  }
   function fxStart() {
     if (FX.on) return; FX.on = true;
     const cv = $('fx'), g = cv.getContext('2d'), still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let W = 0, H = 0, dens = null, img = null, x = 0.1, y = 0.1, t0 = performance.now();
+    let W = 0, H = 0, dens = null, img = null, x = 0.1, y = 0.1;
     const size = () => { W = Math.max(320, Math.floor(innerWidth / 2)); H = Math.max(200, Math.floor(innerHeight / 2)); cv.width = W; cv.height = H; dens = new Float32Array(W * H); img = g.createImageData(W, H); };
     size(); window.addEventListener('resize', size);
     const frame = (now) => {
       if (!FX.on) return;
       const K = SET.fx, dt = FX.last ? Math.min(0.1, (now - FX.last) / 1000) : 0; FX.last = now;
-      if (!K.paused) FX.t += dt * K.speed;
-      const t = FX.t + FX.seed;
-      const a = 1.6 + 0.55 * Math.sin(t * 0.071), b = -2.1 + 0.45 * Math.cos(t * 0.053), c = 1.9 + 0.5 * Math.sin(t * 0.037 + 1), d = -1.9 + 0.35 * Math.cos(t * 0.089 + 2);
-      const decay = K.trail / 100; for (let i = 0; i < dens.length; i++) dens[i] *= decay;
-      const sx = Math.min(W, H) / 4.4, sy = sx, cx = W / 2, cy = H / 2;
-      for (let i = 0, N = K.points * 1000; i < N; i++) { // Peter de Jong: x' = sin(a y) - cos(b x), y' = sin(c x) - cos(d y)
-        const nx = Math.sin(a * y) - Math.cos(b * x), ny = Math.sin(c * x) - Math.cos(d * y); x = nx; y = ny;
-        const px = (cx + x * sx) | 0, py = (cy + y * sy) | 0;
-        if (px >= 0 && px < W && py >= 0 && py < H) dens[py * W + px] += 1;
+      if (!K.paused) FX.t += dt * knob('speed', now);
+      const t = FX.t + FX.seed, dr = knob('drift', now) / 100, pulse = FX.pulse; FX.pulse *= 0.96;
+      const a = 1.6 + 0.55 * dr * Math.sin(t * 0.071), b = -2.1 + 0.45 * dr * Math.cos(t * 0.053), c = 1.9 + 0.5 * dr * Math.sin(t * 0.037 + 1), d = -1.9 + 0.35 * dr * Math.cos(t * 0.089 + 2);
+      const decay = knob('trail', now) / 100; for (let i = 0; i < dens.length; i++) dens[i] *= decay;
+      const ext = K.shape === 'clifford' ? 1 + Math.max(Math.abs(c), Math.abs(d)) : K.shape === 'svensson' ? 1 + Math.max(Math.abs(c), Math.abs(d)) : 2.2; // how far the points reach
+      const sx = Math.min(W, H) / (2 * ext) * knob('zoom', now) / 100, cx = W / 2, cy = H / 2, m = +K.mirror || 0;
+      const plot = (u, v) => { const px = (cx + u * sx) | 0, py = (cy + v * sx) | 0; if (px >= 0 && px < W && py >= 0 && py < H) dens[py * W + px] += 1; };
+      for (let i = 0, N = knob('points', now) * 1000 * (1 + 0.6 * Math.max(0, pulse)); i < N; i++) {
+        let nx, ny;
+        if (K.shape === 'clifford') { nx = Math.sin(a * y) + c * Math.cos(a * x); ny = Math.sin(b * x) + d * Math.cos(b * y); }
+        else if (K.shape === 'svensson') { nx = d * Math.sin(a * x) - Math.sin(b * y); ny = c * Math.cos(a * x) + Math.cos(b * y); }
+        else { nx = Math.sin(a * y) - Math.cos(b * x); ny = Math.sin(c * x) - Math.cos(d * y); } // Peter de Jong
+        x = nx; y = ny; plot(x, y);
+        if (m >= 2) plot(-x, y);
+        if (m >= 4) { plot(x, -y); plot(-x, -y); }
       }
-      const p = img.data, drift = 0.5 + 0.5 * Math.sin(t * 0.05); // violet at the thin edges, cyan to white in the dense core
+      const p = img.data, drift = 0.5 + 0.5 * Math.sin(t * 0.05), gl = knob('glow', now) / 100 * (pulse > 0 ? 1 + 0.9 * pulse : 1 + 0.5 * pulse) / (m ? Math.sqrt(m) : 1);
       for (let i = 0, j = 0; i < dens.length; i++, j += 4) {
-        const v = Math.min(1, Math.log1p(dens[i]) / 3.4 * (K.glow / 100)), hi = v * v * v;
-        p[j] = 110 * v * (1 - v) * (0.6 + 0.8 * drift) + 235 * hi; p[j + 1] = 60 * v + 190 * v * v + 20 * hi; p[j + 2] = 210 * v + 45 * hi; p[j + 3] = 255 * Math.min(1, v * 1.2);
+        const v = Math.min(1, Math.log1p(dens[i]) / 3.4 * gl), hi = v * v * v;
+        paint(p, j, v, hi, drift, K.palette); p[j + 3] = 255 * Math.min(1, v * 1.2);
       }
-      g.putImageData(img, 0, 0); cv.style.filter = K.hue ? 'hue-rotate(' + K.hue + 'deg)' : '';
+      g.putImageData(img, 0, 0);
+      const hue = knob('hue', now); cv.style.filter = hue ? 'hue-rotate(' + hue + 'deg)' : '';
+      document.documentElement.style.setProperty('--glass', (knob('glass', now) / 100).toFixed(2));
       if (!still) FX.raf = requestAnimationFrame(frame);
     };
     FX.raf = requestAnimationFrame(frame);
   }
   function fxPanel() {
     const box = $('fxp'); if (SET.theme !== 'attractor') { box.hidden = true; return; }
-    const K = SET.fx, s = (k, l, min, max, step) => '<label>' + l + '<input type="range" data-fx="' + k + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + K[k] + '"></label>';
+    const K = SET.fx, sel = (k, opts) => '<select data-fxs="' + k + '">' + opts.map(([v, l]) => '<option value="' + v + '"' + (String(K[k]) === String(v) ? ' selected' : '') + '>' + l + '</option>').join('') + '</select>';
+    const s = ([k, l, min, max, step]) => {
+      const lf = K.lfo[k] || { on: false, rate: 0.1, depth: 30 };
+      return '<div class="fxk"><label>' + l + '<span class="fxr"><input type="range" data-fx="' + k + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + K[k] + '">' +
+        '<button class="fxl" type="button" data-lfo="' + k + '" aria-pressed="' + !!lf.on + '" title="Wobble on its own (an LFO)">∿</button></span></label>' +
+        (lf.on ? '<div class="fxlfo"><label>Rate<input type="range" data-lfor="' + k + '" min="0.01" max="1" step="0.01" value="' + lf.rate + '"></label><label>Depth<input type="range" data-lfod="' + k + '" min="0" max="100" step="1" value="' + lf.depth + '"></label></div>' : '') + '</div>';
+    };
+    const kn = (keys) => KNOBS.filter((x) => keys.includes(x[0])).map(s).join('');
     box.hidden = false;
-    box.innerHTML = '<div class="fxh"><b>Strange Attractor</b><span class="grow"></span><button class="icon" type="button" data-fxa="min" title="Fold">–</button></div>' +
-      '<div class="fxb"' + (K.min ? ' hidden' : '') + '><p class="note">A Peter de Jong attractor: every dot is one step of x′ = sin(a·y) − cos(b·x), y′ = sin(c·x) − cos(d·y), with a, b, c and d drifting slowly.</p>' +
-      s('speed', 'Drift speed', 0, 4, 0.1) + s('points', 'Points per frame (thousands)', 5, 200, 5) + s('trail', 'Trail', 50, 99, 1) + s('glow', 'Glow', 40, 250, 5) + s('hue', 'Colour shift', 0, 360, 5) +
-      '<div class="pp-row"><button class="btn ghost small" type="button" data-fxa="pause">' + (K.paused ? 'Play' : 'Pause') + '</button><button class="btn ghost small" type="button" data-fxa="shape">New Shape</button><button class="btn ghost small" type="button" data-fxa="exit">Back to Normal</button></div></div>';
+    box.innerHTML = '<div class="fxh"><b>Strange Attractor</b><span class="grow"></span>' + (K.hide ? '<button class="btn small" type="button" data-fxa="show">Show Interface</button>' : '') + '<button class="icon" type="button" data-fxa="min" title="Fold">' + (K.min ? '+' : '–') + '</button></div>' +
+      '<div class="fxb"' + (K.min ? ' hidden' : '') + '><p class="note">Every dot is one step of a strange attractor; its four numbers drift slowly, so the shape keeps changing. ∿ makes a knob wobble on its own.</p>' +
+      '<h4>Shape</h4><div class="fxrow">' + sel('shape', SHAPES) + sel('mirror', [[0, 'No mirror'], [2, 'Mirror ×2'], [4, 'Mirror ×4']]) + '</div>' + kn(['drift', 'zoom']) +
+      '<h4>Motion</h4>' + kn(['speed', 'points', 'trail']) +
+      '<h4>Colour</h4><div class="fxrow">' + sel('palette', PALETTES) + '</div>' + kn(['glow', 'hue']) +
+      '<h4>Interface</h4>' + kn(['glass']) +
+      '<label class="fxc"><input type="checkbox" data-fxc="react"' + (K.react ? ' checked' : '') + '>Glow when the profile changes</label>' +
+      '<div class="fxrow"><button class="btn ghost small" type="button" data-fxa="hide">' + (K.hide ? 'Show Interface' : 'Hide Interface') + '</button><span class="note">Esc brings it back. Keep:</span></div>' +
+      '<div class="fxkeep">' + KEEP.map(([k, l]) => '<label class="fxc"><input type="checkbox" data-fxkeep="' + k + '"' + (K.keep[k] ? ' checked' : '') + '>' + l + '</label>').join('') + '</div>' +
+      '<div class="pp-row"><button class="btn ghost small" type="button" data-fxa="pause">' + (K.paused ? 'Play' : 'Pause') + '</button><button class="btn ghost small" type="button" data-fxa="shape">New Shape</button><button class="btn ghost small" type="button" data-fxa="random">Randomize</button><button class="btn ghost small" type="button" data-fxa="exit">Back to Normal</button></div></div>';
   }
-  $('fxp').addEventListener('input', (e) => { const k = e.target.dataset.fx; if (!k) return; SET.fx[k] = +e.target.value; saveSettings(); });
+  function fxHide() { // Hide Interface: everything but the canvas and this panel, unless kept
+    const on = SET.theme === 'attractor' && SET.fx.hide, el = document.documentElement;
+    el.classList.toggle('fx-hide', on);
+    KEEP.forEach(([k]) => { el.toggleAttribute('data-keep-' + k, !!SET.fx.keep[k]); });
+  }
+  $('fxp').addEventListener('input', (e) => {
+    const t = e.target, K = SET.fx;
+    if (t.dataset.fx) K[t.dataset.fx] = +t.value;
+    else if (t.dataset.lfor) K.lfo[t.dataset.lfor].rate = +t.value;
+    else if (t.dataset.lfod) K.lfo[t.dataset.lfod].depth = +t.value;
+    else return;
+    saveSettings();
+  });
+  $('fxp').addEventListener('change', (e) => {
+    const t = e.target, K = SET.fx;
+    if (t.dataset.fxs) K[t.dataset.fxs] = t.dataset.fxs === 'mirror' ? +t.value : t.value;
+    else if (t.dataset.fxc) K[t.dataset.fxc] = t.checked;
+    else if (t.dataset.fxkeep) { K.keep[t.dataset.fxkeep] = t.checked; fxHide(); }
+    else return;
+    saveSettings();
+  });
   $('fxp').addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return; const K = SET.fx;
-    if (b.dataset.fxa === 'pause') K.paused = !K.paused;
+    if (b.dataset.lfo) { const k = b.dataset.lfo; K.lfo[k] = Object.assign({ rate: 0.1, depth: 30 }, K.lfo[k] || {}); K.lfo[k].on = !K.lfo[k].on; }
+    else if (b.dataset.fxa === 'pause') K.paused = !K.paused;
     else if (b.dataset.fxa === 'shape') FX.seed += 40 + Math.random() * 200;
+    else if (b.dataset.fxa === 'random') {
+      const pick = (xs) => xs[Math.floor(Math.random() * xs.length)][0];
+      KNOBS.filter(([k]) => k !== 'glass' && k !== 'points').forEach(([k, , min, max, step]) => { K[k] = Math.round((min + Math.random() * (max - min)) / step) * step; });
+      K.trail = Math.max(K.trail, 80); K.shape = pick(SHAPES); K.palette = pick(PALETTES); K.mirror = [0, 0, 2, 4][Math.floor(Math.random() * 4)]; FX.seed += Math.random() * 500;
+    }
+    else if (b.dataset.fxa === 'hide' || b.dataset.fxa === 'show') { K.hide = b.dataset.fxa === 'hide' ? !K.hide : false; fxHide(); }
     else if (b.dataset.fxa === 'min') K.min = !K.min;
-    else if (b.dataset.fxa === 'exit') { SET.theme = 'system'; applyTheme(); }
+    else if (b.dataset.fxa === 'exit') { SET.theme = 'system'; K.hide = false; applyTheme(); }
     saveSettings(); fxPanel();
   });
 
@@ -1856,7 +2006,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
   function applyTheme() {
     if (SET.theme === 'system') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = SET.theme;
     if (SET.theme === 'attractor') fxStart(); else fxStop();
-    fxPanel();
+    fxPanel(); fxHide();
   }
 
   // ---------- routing and render ----------
@@ -1868,7 +2018,7 @@ select,.pp-head select,.vctl select,select.in{background-image:url("data:image/s
     if (m && PAGES.includes(m[1])) S.page = m[1];
     const params = new URLSearchParams(m && m[2] ? m[2] : '');
     if (params.get('p')) { const o = dec(params.get('p')); if (o && o.p) { S.profile = Object.assign({ filters: [] }, o.p); S.pname = o.n || 'shared'; S.loaded = 'l:' + S.pname; S.modified = false; } }
-    if (params.get('v')) { const o = dec(params.get('v')); if (o) { if (o.f) S.f = Object.assign(DEFAULT_F(), o.f); if (o.v) S.v[S.page] = Object.assign(S.v[S.page], o.v); } }
+    if (params.get('v')) { const o = dec(params.get('v')); if (o) { if (o.f) { S.f = Object.assign(DEFAULT_F(), o.f); delete S.f.show; } /* Show was a filter once */ if (o.v) S.v[S.page] = Object.assign(S.v[S.page], o.v); } }
   }
   window.addEventListener('hashchange', () => { readHash(); render(); });
   function render() {

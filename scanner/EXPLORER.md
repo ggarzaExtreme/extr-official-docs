@@ -14,8 +14,11 @@ what isn't read. Nothing about products is hardcoded.
   - the **view**: how you look at it
   - the **profile**: what you keep
 - The profile never changes the view. Every view marks what the profile takes.
-- **One way to add.** + (and "+ Add These") adds what the current filters show, releases included. Taking
-  out mirrors it. Adding the same thing twice is refused.
+- **One way to add.** + (and "+ Add All Filtered") adds what the current filters show, releases included,
+  as a rule: later releases that match join on their own. ✓/○ on a single file adds just that file, which
+  stays as it is. Taking out mirrors it. Adding the same thing twice is refused.
+- **Words.** Filters are what you see; the view is how (the page, its Group By and columns); the profile is
+  what you keep; Checkout is getting the files. "Selection" means only Search's Select Several.
 - Counts in the profile are **files** (unique URLs), not listings.
 - A document has a **place** and **entries**.
   - Its place is where it lives: site and path.
@@ -31,8 +34,8 @@ open on one page means open on all of them.
 
 | Page | Purpose | Requirements |
 |---|---|---|
-| Dashboard | the catalog at a glance | facts; Freshness; documents by type, by heading and per year; most documents; recently updated; starter profiles; snapshots and compatibility |
-| Matrix | entries by document type | rows grouped by where it lives (host › heading or path › entry › file), docs-site heading, starter profile, or A–Z; columns are types, coloured by value, with short labels and the full name on hover; first column resizable; + on every group, row and column; rows open down to single files (default) |
+| Dashboard | the catalog at a glance | facts; documents by type, by heading and per year; most documents; recently updated; starter profiles; snapshots and compatibility; Freshness always last, since it spans the full width (a card after it reads as a separate group) |
+| Matrix | entries by document type | rows grouped by where it lives (host › heading or path › entry › file), product (kind › family › entry), docs-site heading, starter profile, or none (A–Z); columns are types, coloured by value, with short labels and the full name on hover; first column resizable; + on every group, row and column; rows open down to single files (default) |
 | Search | every document | grouped, collapsible, sortable (Title, Release, Published), resizable columns; a ✓/○ first column adds or takes out without opening Details; Select Several (shift-click for a run) with a bulk bar; row actions: open, add, copy link, details |
 | Browse | curated ways in | five lists side by side: Starter Profiles, Docs-Site Headings, Where It Lives, Ways In, Snapshots. The chosen item is highlighted and what it holds shows underneath. Choosing never moves the page |
 | Checkout | getting the files | Get These Files first: what to get, then three ways (1. the scanner, recommended; 2. download here; 3. the link list). Then totals by how each file can be fetched, the table (keep or leave out; group by entry, type, folder, how to get it), snapshots, left-out files, and the profile as a file |
@@ -44,23 +47,29 @@ in the last 12 months. Newest is by number, not recommendation.
 ## Shared Parts
 
 - **Top bar:** name; scan date, age and next due; the tabs, with the Checkout count; Legend · Settings · About.
-- **Toolbar:** the Filters toggle (with a count), chips only while filters are active, and the Profile
-  toggle (with the name, file count and "modified").
-- **Filters (left, resizable).** Search, then Expand All / Collapse All, then cards for:
-  - Show, Sites, Releases, Type, Value (a setting), Docs-Site Heading, Entry, Compatibility, Format, Published
-  - Choices stack vertically, lists grow, and "only" never shifts the layout.
-- **Profile (right, resizable).** It holds:
+- **Toolbar:** the Filters toggle (with a count); while filters are active, Clear All and then the chips
+  (Clear All first, so it never moves); at the right, "+ Add All Filtered" and the Profile toggle (with the
+  name, file count and "modified").
+- **Filters (left, resizable).** Search, then Link (a link to this page, its filters and Group By) and
+  Expand All / Collapse All, then cards for:
+  - Sites, Releases, Type, Value (a setting), Docs-Site Heading, Entry, Compatibility, Format, Published
+  - Choices stack vertically, lists grow, and "only" never shifts the layout: it shows in the count's place
+    on hover. A type's checkbox carries its value colour, so every type name fits on one line at 280 px.
+  - What the profile takes is shown by the marks on every page, not by a filter.
+- **Profile (right, resizable): the cart.** It holds:
   - the profile select (edited profiles show "name · modified", so any choice resets)
-  - the file count, Save, Copy Link and the value bars
+  - the file count, Save, Link (a link that opens the profile) and the value bars
   - "Checkout: Get the Files →"
-  - four folds, each remembering open or shut and scrolling on its own, so the panel works with Details at
-    the side or the bottom:
-    - What It Takes: every entry, with its type counts (click one for its Details)
-    - Snapshots
-    - Rules
-    - Files: every file the profile takes, as Details' file rows (✓, title, release, +/−). It has a filter
-      box (title, entry or type, e.g. "Other") and grouping by entry, by type or none. It shows 300 rows,
-      then Show All.
+  - "Adding hardware also adds its software" (a setting): adding a platform the support tables name also
+    adds the software that runs there, of the same types (all types for a whole row or group), in the
+    releases the filters show that run on it. On the default (latest), software sharing one numbering
+    (ExtremeXOS, Switch Engine) adds only the newest. Taking out never cascades. Hardware with no table
+    says so in the toast.
+  - a find box (title, entry or type, e.g. "Other")
+  - one line per entry: its name (opens its Details), ↻ when a rule takes it (hover for the rules), a pin
+    when files were added one by one, its file count, its type chips, and × to take it all out. A line opens
+    to its files (✓, title, release, −), 300 at a time, then Show All.
+  - one line per snapshot, with ×
   - the left-out files
 - **Details.** A panel at the right or bottom (a setting), resizable, with Pop Out to a window. It shows one
   of three things:
@@ -109,8 +118,14 @@ ExtremeXOS, Fabric Engine and VOSS. Nothing in the page names them; adding a sou
 
 ## Settings
 
-- **Theme:** System, Light or Dark. The dot in the scan status starts the Strange Attractor, with knobs for
-  speed, points, trail, glow and colour; it stops for reduced motion.
+- **Theme:** System, Light or Dark. The dot in the scan status starts the Strange Attractor; it stops for
+  reduced motion. Its panel has:
+  - shape (de Jong, Clifford, Svensson), mirror (none, ×2, ×4), how far it drifts, zoom
+  - drift speed, points, trail; palette, glow, colour shift; panel glass
+  - ∿ on any knob: it wobbles on its own (an LFO, with a rate and a depth)
+  - Glow When the Profile Changes: adding blooms, taking out dims
+  - Hide Interface, keeping any of top bar, toolbar, filters, profile and page; Esc brings it back
+  - Pause, New Shape, Randomize, Back to Normal
 - **Matrix:** rows down to files, colour by value, group shading, a count click opens details, totals, hide
   empty columns.
 - **Clicks and layout:**
@@ -141,4 +156,5 @@ Stop there.
 - [ ] Release rules give the expected releases for an entry with deep numbering (Switch Engine, VOSS)
 - [ ] Compatibility both ways for each software: Switch Engine 32.7 → its platforms; Fabric Engine 9.4.1 → the universal switches; the 5520 shows both relations
 - [ ] Browse › Where It Lives › /products/ counts and adds the datasheets
+- [ ] Matrix › Group By › Product places every docs-site entry (the report says so); with the setting on, adding the 5520 row adds Switch Engine and Fabric Engine
 - [ ] Main-site and snapshot downloads fetch

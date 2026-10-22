@@ -133,6 +133,7 @@ if the site really shrank.
 | `config/profiles/` | starter profiles |
 | `config/main-site-entries.yaml` | main-site product names paired with docs-site entries (so a datasheet belongs to its entry) |
 | `config/compatibility.yaml` | which support tables say which hardware runs which software |
+| `config/products.yaml` | each docs-site entry's product family (hardware, software, solutions), for the explorer's Group By › Product |
 | `results/catalog/` | the catalog (generated): see below |
 | `results/reports/<date>/` | each scan's report, changes and notes |
 | `scanner/scan.py` | the scanner and the library tool; `docprofile.py` reads a PDF's details |
